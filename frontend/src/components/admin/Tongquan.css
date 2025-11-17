@@ -1,0 +1,309 @@
+/* Reset cơ bản và font chữ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body,
+html,
+#root1 {
+  height: 100vh;
+  background-color: #f2f8ff;
+  color: #222;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Container chính */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar bên trái */
+.sidebar {
+  width: 220px;
+  background-color: #fff;
+  border-right: 1px solid #e0e0e0;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .logo span {
+  margin-left: 8px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+}
+
+.sidebar nav ul li {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 7px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar nav ul li span {
+  margin-right: 12px;
+  font-size: 1.2rem;
+}
+
+/* Mục đang active */
+.sidebar nav ul li.active,
+.sidebar nav ul li:hover {
+  background-color: #e7f0ff;
+  color: #2378f7;
+  font-weight: 700;
+}
+
+/* Phần nội dung chính */
+.main-content {
+  flex: 1;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Header trên cùng */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+header h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+/* Phần user info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.user-info .notification {
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.user-info .user-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar placeholder */
+.user-info .user-name::before {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  border-radius: 50%;
+}
+
+/* Các ô thông tin */
+.info-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+/* Card thông tin */
+.info-card {
+  flex: 1;
+  background-color: #729dfc;
+  color: #222;
+  border-radius: 12px;
+  padding: 25px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 5px 10px rgb(114 157 252 / 0.3);
+  cursor: default;
+  transition: box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  box-shadow: 0 8px 15px rgb(114 157 252 / 0.5);
+}
+
+.info-card .icon {
+  font-size: 2.3rem;
+  flex-shrink: 0;
+}
+
+.info-card .card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.info-card .card-value {
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: #222;
+}
+
+/* Màu background cho từng card */
+/* Số xe hoạt động */
+.info-card:nth-child(1) {
+  background-color: #729dfc;
+  color: #030f9f;
+  box-shadow: 1px 7px 9px rgba(114, 157, 252, 0.36);
+}
+
+/* Tài xế trực hôm nay */
+.info-card:nth-child(2) {
+  background-color: #8ef24f;
+  color: #626d1b;
+  box-shadow: 1px 7px 9px rgba(142, 242, 79, 0.36);
+}
+
+/* Học sinh trên xe */
+.info-card:nth-child(3) {
+  background-color: #ecbb07;
+  color: #403505;
+  box-shadow: 1px 7px 9px rgba(236, 187, 7, 0.5);
+}
+
+/* Sự cố */
+.info-card:nth-child(4) {
+  background-color: #f76d6d;
+  color: #6c1515;
+  box-shadow: 1px 7px 9px rgba(247, 109, 109, 0.52);
+}
+
+/* Khung bản đồ và phần bên cạnh */
+.map-and-info {
+  display: flex;
+  gap: 40px;
+  flex: 1;
+}
+
+/* Chỗ bản đồ */
+.map-container {
+  flex: 3;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
+  padding: 15px;
+  position: relative;
+  min-height: 400px;
+}
+
+/* Khung tooltip */
+.tooltip {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 7px rgb(0 0 0 / 0.12);
+  padding: 14px 16px;
+  max-width: 260px;
+  font-size: 0.9rem;
+  color: #333;
+  z-index: 10;
+}
+
+.tooltip strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* Phần bên phải */
+.side-info {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+/* Chú thích và cảnh báo */
+.legend,
+.alerts {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 25px 20px;
+  box-shadow: 0 3px 6px rgb(0 0 0 / 0.09);
+}
+
+/* Tiêu đề */
+.legend h4,
+.alerts h4 {
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+}
+
+/* Nội dung chú thích */
+.legend p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Icon trong chú thích */
+.legend .icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Màu icon chú thích tương ứng */
+.legend p:nth-child(2) .icon {
+  color: #4269e4; /* xe đang hoạt động */
+}
+
+.legend p:nth-child(3) .icon {
+  color: #e13232; /* điểm đón */
+}
+
+.legend p:nth-child(4) .icon {
+  color: #7a7a7a; /* sự cố */
+}
+
+/* Cảnh báo */
+.alerts .alert-item {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 7px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.alerts .alert-item:last-child {
+  border-bottom: none;
+}
+
+.map-placeholder {
+  height: 100%;
+  width: 100%;
+}

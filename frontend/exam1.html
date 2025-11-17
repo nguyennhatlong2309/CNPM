@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tuyến đường với nhiều điểm dừng</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // Thay thế bằng Mapbox Access Token của bạn
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
+
+      // Khởi tạo bản đồ, trung tâm gần khu vực TP.HCM
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: [106.6708, 10.7676], // Trung tâm khu vực
+        zoom: 12,
+      });
+
+      // Mảng tọa độ các điểm (thứ tự: xuất phát → điểm dừng → đích)
+      const waypoints = [
+        [106.682, 10.7626], // Điểm 1: Đại học Sài Gòn
+        [106.6597, 10.7725], // Điểm 2: Đại học Bách Khoa
+        [106.6892, 10.7775], // Điểm 3: Đại học Kinh tế TP.HCM
+        [106.605, 10.726], // Điểm 4: Đại học Ngoại thương (đích)
+      ];
+
+      // Hàm lấy tuyến đường qua nhiều điểm
+      async function getRoute() {
+        // Tạo chuỗi tọa độ cho API (cách nhau bằng ;)
+        const coordinates = waypoints
+          .map((coord) => `${coord[0]},${coord[1]}`)
+          .join(";");
+        const query = await fetch(
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+          { method: "GET" }
+        );
+        const json = await query.json();
+        const data = json.routes[0];
+        const route = data.geometry.coordinates;
+
+        // Thêm tuyến đường lên bản đồ
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "LineString",
+                coordinates: route,
+              },
+            },
+          },
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#3887be",
+            "line-width": 5,
+            "line-opacity": 0.75,
+          },
+        });
+
+        // Thêm markers cho từng điểm (màu khác nhau)
+        const colors = ["#f30", "#ff0", "#0f0", "#00f"]; // Đỏ, vàng, xanh lá, xanh dương
+        waypoints.forEach((coord, index) => {
+          map.addLayer({
+            id: `point-${index}`,
+            type: "circle",
+            source: {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: coord,
+                },
+              },
+            },
+            paint: {
+              "circle-radius": 10,
+              "circle-color": colors[index % colors.length],
+            },
+          });
+        });
+      }
+
+      // Chờ bản đồ tải xong rồi vẽ tuyến đường
+      map.on("load", () => {
+        getRoute();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tuyến đường từ Đại học Sài Gòn đến Đại học Bách Khoa</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        width: 80vw;
+        height: 80vh;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // Thay thế bằng Mapbox Access Token của bạn
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
+
+      // Khởi tạo bản đồ, trung tâm giữa hai điểm
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: [106.6708, 10.7676], // Trung tâm giữa hai điểm
+        zoom: 13,
+      });
+
+      // Tọa độ điểm xuất phát và đích
+      const start = [106.682, 10.7626]; // Đại học Sài Gòn
+      const end = [106.6597, 10.7725]; // Đại học Bách Khoa
+
+      const end1 = [106.699, 10.779]; // Bưu điện TP.HCM
+      // Gọi Directions API để lấy tuyến đường
+      async function getRoute() {
+        const query = await fetch(
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+          { method: "GET" }
+        );
+        const json = await query.json();
+        const data = json.routes[0];
+        console.log(data.distance);
+        const route = data.geometry.coordinates;
+
+        // Thêm tuyến đường lên bản đồ
+        map.addLayer({
+          id: "route",
+          type: "line",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "LineString",
+                coordinates: route,
+              },
+            },
+          },
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "#0616FF",
+            "line-width": 5,
+            "line-opacity": 0.75,
+          },
+        });
+
+        // Thêm điểm xuất phát và đích
+        map.addLayer({
+          id: "start",
+          type: "circle",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: start,
+              },
+            },
+          },
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#f30",
+          },
+        });
+
+        map.addLayer({
+          id: "end",
+          type: "circle",
+          source: {
+            type: "geojson",
+            data: {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: end,
+              },
+            },
+          },
+          paint: {
+            "circle-radius": 10,
+            "circle-color": "#0f0",
+          },
+        });
+      }
+
+      // Chờ bản đồ tải xong rồi vẽ tuyến đường
+      map.on("load", () => {
+        getRoute();
+      });
+    </script>
+  </body>
+</html>

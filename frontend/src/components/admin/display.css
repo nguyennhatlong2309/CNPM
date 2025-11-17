@@ -1,0 +1,8 @@
+.main-content {
+  flex: 1;
+  padding: 0px 0px;
+  background-color: #f5faff;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
