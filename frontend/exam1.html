@@ -1,121 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Tuyến đường với nhiều điểm dừng</title>
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
   </head>
   <body>
-    <div id="map"></div>
+    <select id="weekSelect"></select>
+
     <script>
-      // Thay thế bằng Mapbox Access Token của bạn
-      mapboxgl.accessToken =
-        "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
+      function getMonday(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
+      }
 
-      // Khởi tạo bản đồ, trung tâm gần khu vực TP.HCM
-      const map = new mapboxgl.Map({
-        container: "map",
-        style: "mapbox://styles/mapbox/streets-v12",
-        center: [106.6708, 10.7676], // Trung tâm khu vực
-        zoom: 12,
-      });
-
-      // Mảng tọa độ các điểm (thứ tự: xuất phát → điểm dừng → đích)
-      const waypoints = [
-        [106.682, 10.7626], // Điểm 1: Đại học Sài Gòn
-        [106.6597, 10.7725], // Điểm 2: Đại học Bách Khoa
-        [106.6892, 10.7775], // Điểm 3: Đại học Kinh tế TP.HCM
-        [106.605, 10.726], // Điểm 4: Đại học Ngoại thương (đích)
-      ];
-
-      // Hàm lấy tuyến đường qua nhiều điểm
-      async function getRoute() {
-        // Tạo chuỗi tọa độ cho API (cách nhau bằng ;)
-        const coordinates = waypoints
-          .map((coord) => `${coord[0]},${coord[1]}`)
-          .join(";");
-        const query = await fetch(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
-          { method: "GET" }
-        );
-        const json = await query.json();
-        const data = json.routes[0];
-        const route = data.geometry.coordinates;
-
-        // Thêm tuyến đường lên bản đồ
-        map.addLayer({
-          id: "route",
-          type: "line",
-          source: {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "LineString",
-                coordinates: route,
-              },
-            },
-          },
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#3887be",
-            "line-width": 5,
-            "line-opacity": 0.75,
-          },
-        });
-
-        // Thêm markers cho từng điểm (màu khác nhau)
-        const colors = ["#f30", "#ff0", "#0f0", "#00f"]; // Đỏ, vàng, xanh lá, xanh dương
-        waypoints.forEach((coord, index) => {
-          map.addLayer({
-            id: `point-${index}`,
-            type: "circle",
-            source: {
-              type: "geojson",
-              data: {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: coord,
-                },
-              },
-            },
-            paint: {
-              "circle-radius": 10,
-              "circle-color": colors[index % colors.length],
-            },
-          });
+      function format(d) {
+        return d.toLocaleDateString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
         });
       }
 
-      // Chờ bản đồ tải xong rồi vẽ tuyến đường
-      map.on("load", () => {
-        getRoute();
-      });
+      const select = document.getElementById("weekSelect");
+      let monday = getMonday(new Date()); // tuần hiện tại
+
+      for (let i = 0; i < 10; i++) {
+        // tạo 10 tuần
+        let start = new Date(monday);
+        let end = new Date(monday);
+        end.setDate(start.getDate() + 6);
+
+        let option = document.createElement("option");
+        option.value = `${start.toISOString().split("T")[0]}_${
+          end.toISOString().split("T")[0]
+        }`;
+        option.textContent = `${format(start)} - ${format(end)}`;
+
+        select.appendChild(option);
+
+        // sang tuần tiếp theo
+        monday.setDate(monday.getDate() + 7);
+      }
+      //   {
+      //     start: [106.682, 10.7626],
+      //     end: [106.6597, 10.7725],
+      //   },
+      //   {
+      //     start: [10.797543545480988, 106.70361551579074],
+      //     end: [10.79103550113593, 106.70088406870119],
+      //   },
+      //   {
+      //     start: [10.804989765729758, 106.7170083323355],
+      //     end: [10.792830298172355, 106.7062740491795],
+      //   },
+      //   {
+      //     start: [10.796944379543751, 106.66666391691976],
+      //     end: [10.773743470119438, 106.67791019571969],
+      //   },
+      // ];
     </script>
   </body>
 </html>
+// list_place = [

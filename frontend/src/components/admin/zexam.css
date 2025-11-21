@@ -1,0 +1,156 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f9ff;
+}
+
+.schedule-manager {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: white;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #eef6ff;
+  height: 70px;
+  border-bottom: 1px solid #d9e6fb;
+}
+
+.header-left h1 {
+  font-weight: 900;
+  color: black;
+  margin: 0;
+  font-size: 22px;
+}
+
+.header-center {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.header-center h2 {
+  font-weight: 800;
+  margin: 0;
+  font-size: 22px;
+  color: #111;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.combobox-group select {
+  border: 1px solid #c1c7d0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.combobox-group select:not(:last-child) {
+  margin-right: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  color: white;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #5998ff;
+}
+
+.edit-btn:hover {
+  background-color: #417ee8;
+}
+
+.create-btn {
+  background-color: #5189f1;
+}
+
+.create-btn:hover {
+  background-color: #3167cc;
+}
+
+/* Table */
+.table-container {
+  padding: 20px 20px 40px 20px;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 850px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #444;
+}
+
+th {
+  background-color: #f2f6ff;
+  font-weight: 700;
+  color: #333;
+}
+
+.route-cell {
+  font-weight: 800;
+  color: #222;
+  background-color: #f7fbff;
+  vertical-align: middle;
+  width: 130px;
+  user-select: none;
+}
+
+/* Các ô lịch trình */
+.schedule-cell {
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 4px;
+  user-select: none;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+}
+/*  */
+.schedule-cell.assigned {
+  background-color: #5986ff91;
+  color: white;
+}
+
+.schedule-cell.unassigned {
+  background-color: #eee;
+  color: #888;
+}
+
+.schedule-cell:hover {
+  box-shadow: 0 0 8px #5986ff7a;
+  background-color: #4673ff;
+  color: white;
+}

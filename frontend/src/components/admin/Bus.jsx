@@ -52,6 +52,26 @@ const busData = [
     tuyenDuong: "Tuyến E",
     khoiHanh: "N/A",
   },
+  {
+    id: 6,
+    bienSo: "SMM-2034",
+    soGhe: 30,
+    tinhTrang: "Đang hoạt động",
+    taiXe: "Lê Thị C",
+    soHocSinh: "28/30",
+    tuyenDuong: "Tuyến C",
+    khoiHanh: "06:45",
+  },
+  {
+    id: 7,
+    bienSo: "ABC-4567",
+    soGhe: 45,
+    tinhTrang: "Đang hoạt động",
+    taiXe: "Phạm Văn D",
+    soHocSinh: "43/45",
+    tuyenDuong: "Tuyến D",
+    khoiHanh: "06:50",
+  },
 ];
 
 export default function BusManagement() {
@@ -63,84 +83,85 @@ export default function BusManagement() {
   );
 
   return (
-    <div>
-      <div className="title-row">
+    <div className="bus-content">
+      <div className="bus-title-row">
         <input
-          className="search-input"
+          className="bus-search-input"
           placeholder="Tìm kiếm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="btn-add">+ Thêm xe bus</button>
+        <button className="bus-btn-add">+ Thêm xe bus</button>
       </div>
-      <table className="bus-table">
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Biển số</th>
-            <th>Số ghế</th>
-            <th>Tình trạng</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className="bus-table">
+        <div className="bus-table-header">
+          <div>STT</div>
+          <div>Biển số</div>
+          <div>Số ghế</div>
+          <div>Tình trạng</div>
+          <div>Thao tác</div>
+        </div>
+
+        <div className="bus-table-body">
           {filteredBuses.map((bus, index) => (
-            <tr
+            <div
               key={bus.id}
-              className={selectedBus.id === bus.id ? "selected" : ""}
+              className={
+                selectedBus.id === bus.id
+                  ? "bus-selected bus-table-row "
+                  : " bus-table-row "
+              }
               onClick={() => setSelectedBus(bus)}
             >
-              <td>{index + 1}</td>
-              <td>{bus.bienSo}</td>
-              <td>{bus.soGhe}</td>
-              <td>{bus.tinhTrang}</td>
-              <td>
-                <button className="btn-icon" aria-label="Sửa">
+              <div>{index + 1}</div>
+              <div>{bus.bienSo}</div>
+              <div>{bus.soGhe}</div>
+              <div>{bus.tinhTrang}</div>
+              <div>
+                <button className="bus-btn-icon" aria-label="Sửa">
                   ✏️
                 </button>
-                <button className="btn-icon" aria-label="Xóa">
+                <button className="bus-btn-icon" aria-label="Xóa">
                   🗑️
                 </button>
-              </td>
-            </tr>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
 
       {selectedBus && (
         <div className="bus-detail">
           <div>
-            <div className="label">Biển số</div>
-            <div className="value">
+            <div className="bus-label">Biển số</div>
+            <div className="bus-value">
               <b>{selectedBus.bienSo}</b>
             </div>
           </div>
           <div>
-            <div className="label">Tài xế</div>
-            <div className="value">
+            <div className="bus-label">Tài xế</div>
+            <div className="bus-value">
               <b>{selectedBus.taiXe}</b>
             </div>
           </div>
           <div>
-            <div className="label">Trạng thái</div>
-            <div className="value">
+            <div className="bus-label">Trạng thái</div>
+            <div className="bus-value">
               <b>{selectedBus.tinhTrang}</b>
             </div>
           </div>
           <div>
-            <div className="label">Tuyến đường</div>
-            <div className="value">{selectedBus.tuyenDuong}</div>
+            <div className="bus-label">Tuyến đường</div>
+            <div className="bus-value">{selectedBus.tuyenDuong}</div>
           </div>
           <div>
-            <div className="label">Số học sinh</div>
-            <div className="value">{selectedBus.soHocSinh}</div>
+            <div className="bus-label">Số học sinh</div>
+            <div className="bus-value">{selectedBus.soHocSinh}</div>
           </div>
           <div>
-            <div className="label">Thời gian khởi hành</div>
-            <div className="value">{selectedBus.khoiHanh}</div>
+            <div className="bus-label">Thời gian khởi hành</div>
+            <div className="bus-value">{selectedBus.khoiHanh}</div>
           </div>
-
-          <button className="btn-edit">Chỉnh sửa</button>
         </div>
       )}
     </div>

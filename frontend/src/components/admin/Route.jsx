@@ -29,10 +29,49 @@ const routesData = [
     tinhTrang: "Đang hoạt động",
   },
   {
-    id: 4,
-    tenTuyen: "D",
-    diemBatDau: "156 AFG",
-    diemKetThuc: "Trường MNO",
+    id: 1,
+    tenTuyen: "A",
+    diemBatDau:
+      " 273 An Dương Vương, Phường, Chợ Quán, Thành phố Hồ Chí Minh 700000, Việt Nam",
+    diemKetThuc:
+      "271 Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh 70000, Việt Nam",
+    tinhTrang: "Đang hoạt động",
+  },
+  {
+    id: 2,
+    tenTuyen: "B",
+    diemBatDau: "321 BCD",
+    diemKetThuc: "Trường GHI",
+    tinhTrang: "Tạm dừng",
+  },
+  {
+    id: 3,
+    tenTuyen: "C",
+    diemBatDau: "12 DEF",
+    diemKetThuc: "Trường JKL",
+    tinhTrang: "Đang hoạt động",
+  },
+  {
+    id: 1,
+    tenTuyen: "A",
+    diemBatDau:
+      " 273 An Dương Vương, Phường, Chợ Quán, Thành phố Hồ Chí Minh 700000, Việt Nam",
+    diemKetThuc:
+      "271 Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, Thành phố Hồ Chí Minh 70000, Việt Nam",
+    tinhTrang: "Đang hoạt động",
+  },
+  {
+    id: 2,
+    tenTuyen: "B",
+    diemBatDau: "321 BCD",
+    diemKetThuc: "Trường GHI",
+    tinhTrang: "Tạm dừng",
+  },
+  {
+    id: 3,
+    tenTuyen: "C",
+    diemBatDau: "12 DEF",
+    diemKetThuc: "Trường JKL",
     tinhTrang: "Đang hoạt động",
   },
 ];
@@ -44,7 +83,6 @@ const defaultProps = {
   },
   zoom: 15,
 };
-// 10.760033031593235, 106.68217246472125
 
 function RouteManagement() {
   const [routes, setRoutes] = useState(routesData);
@@ -66,81 +104,79 @@ function RouteManagement() {
   };
 
   return (
-    <div className="route-management-container">
-      <main className="main-content">
-        <section className="content-section">
-          <div className="section-header">
-            <input
-              type="search"
-              placeholder="Tìm kiếm"
-              className="search-input"
-            />
-            <button className="btn-add">+ Thêm tuyến</button>
-          </div>
+    <div className="route-content">
+      <div className="route-content-header">
+        <input
+          type="search"
+          placeholder="Tìm kiếm"
+          className="route-search-input"
+        />
+        <button className="btn-add">+ Thêm tuyến</button>
+      </div>
 
-          <table className="route-table">
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Tên tuyến</th>
-                <th>Điểm bắt đầu</th>
-                <th>Tình trạng</th>
-                <th>Thao tác</th>
-              </tr>
-            </thead>
-            <tbody>
-              {routes.map((route, index) => (
-                <tr
-                  key={route.id}
-                  className={selectedRouteId === route.id ? "selected" : ""}
-                  onClick={() => setSelectedRouteId(route.id)}
+      <div className="route-table">
+        <div className="route-table-header">
+          <div>STT</div>
+          <div>Tên tuyến</div>
+          <div>Điểm bắt đầu</div>
+          <div>Tình trạng</div>
+          <div>Thao tác</div>
+        </div>
+
+        <div className="route-table-body">
+          {routes.map((route, index) => (
+            <div
+              key={route.id}
+              className={
+                selectedRouteId === route.id
+                  ? "selected route-table-body-row"
+                  : "route-table-body-row"
+              }
+              onClick={() => setSelectedRouteId(route.id)}
+            >
+              <div>{index + 1}</div>
+              <div>{route.tenTuyen}</div>
+              <div>{route.diemBatDau}</div>
+              <div>{route.tinhTrang}</div>
+              <div>
+                <button
+                  aria-label={`Chỉnh sửa tuyến ${route.tenTuyen}`}
+                  className="btn-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(route.id);
+                  }}
                 >
-                  <td>{index + 1}</td>
-                  <td>{route.tenTuyen}</td>
-                  <td>{route.diemBatDau}</td>
-                  <td>{route.tinhTrang}</td>
-                  <td>
-                    <button
-                      aria-label={`Chỉnh sửa tuyến ${route.tenTuyen}`}
-                      className="btn-icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEdit(route.id);
-                      }}
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      aria-label={`Xóa tuyến ${route.tenTuyen}`}
-                      className="btn-icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(route.id);
-                      }}
-                    >
-                      🗑️
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="map-detail-section">
-            <div className="map-container">
-              <MAPP />
+                  ✏️
+                </button>
+                <button
+                  aria-label={`Xóa tuyến ${route.tenTuyen}`}
+                  className="btn-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(route.id);
+                  }}
+                >
+                  🗑️
+                </button>
+              </div>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <aside className="route-info">
-              <button className="btn-edit">Chỉnh sửa</button>
-              <h3>Tuyến {selectedRoute.tenTuyen}:</h3>
-              <p>
-                {selectedRoute.diemBatDau} - {selectedRoute.diemKetThuc}
-              </p>
-            </aside>
-          </div>
-        </section>
-      </main>
+      <div className="route-detail-section">
+        <div className="route-map-container">
+          <MAPP />
+        </div>
+
+        <aside className="route-info">
+          <h3>Tuyến {selectedRoute.tenTuyen}:</h3>
+          <p>
+            {selectedRoute.diemBatDau} - {selectedRoute.diemKetThuc}
+          </p>
+        </aside>
+      </div>
     </div>
   );
 }

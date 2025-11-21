@@ -1,6 +1,5 @@
 import React from "react";
 import "./Tongquan.css";
-import Sidebar from "./sidebar";
 
 const data = {
   soXeHoatDong: 35,
@@ -43,7 +42,7 @@ const Tooltip = ({ busInfo }) => (
 );
 
 const Legend = () => (
-  <div className="legend">
+  <div className="overview-legend">
     <h4>Chú thích</h4>
     <p>
       <span className="icon">🚌</span> Xe đang hoạt động
@@ -71,15 +70,8 @@ const Alerts = ({ alerts }) => (
 
 const Dashboard = () => {
   return (
-    <div className="main-content">
-      <header>
-        <h2>Tổng quan</h2>
-        <div className="user-info">
-          <span className="notification">🔔</span>
-          <span className="user-name">{data.userName}</span>
-        </div>
-      </header>
-      <div className="info-cards">
+    <div className="overview-content">
+      <div className="overview-info-cards">
         <InfoCard
           icon="🚌"
           title="Số xe hoạt động"

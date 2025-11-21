@@ -5,98 +5,84 @@ import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
 
+// ⚠️ Sửa lại TẤT CẢ toạ độ thành [lng, lat]
+const list_place = [
+  {
+    start: [106.682, 10.7626],
+    end: [106.6597, 10.7725],
+  },
+  {
+    start: [106.70361551579074, 10.797543545480988],
+    end: [106.70088406870119, 10.79103550113593],
+  },
+  {
+    start: [106.7170083323355, 10.804989765729758],
+    end: [106.7062740491795, 10.792830298172355],
+  },
+  {
+    start: [106.66666391691976, 10.796944379543751],
+    end: [106.67791019571969, 10.773743470119438],
+  },
+];
+
+async function getRoute({ map, start, end, index }) {
+  const layerID = `route-${index}`;
+
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+  const res = await fetch(url);
+  const json = await res.json();
+
+  if (!json.routes || !json.routes[0]) {
+    console.error("No route found for:", start, end);
+    return;
+  }
+
+  const route = json.routes[0].geometry.coordinates;
+
+  map.addLayer({
+    id: layerID,
+    type: "line",
+    source: {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        geometry: {
+          type: "LineString",
+          coordinates: route,
+        },
+      },
+    },
+    layout: {
+      "line-cap": "round",
+      "line-join": "round",
+    },
+    paint: {
+      "line-color": "#000fe7",
+      "line-width": 5,
+      "line-opacity": 0.75,
+    },
+  });
+}
+
 export default function MapboxDirection() {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
     const map = new mapboxgl.Map({
-      container: mapContainerRef.current, // Thẻ DOM được tham chiếu
+      container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [106.6708, 10.7676], // Trung tâm giữa hai điểm
+      center: [106.6708, 10.7676],
       zoom: 13,
     });
 
-    const start = [106.682, 10.7626]; // Đại học Sài Gòn
-    const end = [106.6597, 10.7725]; // Đại học Bách Khoa
-
-    async function getRoute() {
-      const query = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
+    map.on("load", () => {
+      list_place.forEach((p, i) =>
+        getRoute({ map, start: p.start, end: p.end, index: i })
       );
-      const json = await query.json();
-      const data = json.routes[0];
-      const route = data.geometry.coordinates;
+    });
 
-      // Thêm tuyến đường (line)
-      map.addLayer({
-        id: "route",
-        type: "line",
-        source: {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "LineString",
-              coordinates: route,
-            },
-          },
-        },
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": "#0616FF",
-          "line-width": 5,
-          "line-opacity": 0.75,
-        },
-      });
-
-      // Thêm điểm bắt đầu (circle)
-      map.addLayer({
-        id: "start",
-        type: "circle",
-        source: {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: start,
-            },
-          },
-        },
-        paint: {
-          "circle-radius": 10,
-          "circle-color": "#f30",
-        },
-      });
-
-      // Thêm điểm kết thúc
-      map.addLayer({
-        id: "end",
-        type: "circle",
-        source: {
-          type: "geojson",
-          data: {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: end,
-            },
-          },
-        },
-        paint: {
-          "circle-radius": 10,
-          "circle-color": "#0f0",
-        },
-      });
-    }
-
-    map.on("load", getRoute);
-
-    return () => map.remove(); // Cleanup khi unmount
+    return () => map.remove();
   }, []);
 
   return (

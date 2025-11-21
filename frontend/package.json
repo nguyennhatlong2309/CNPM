@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.29.1",
     "google-map-react": "^2.2.5",
     "mapbox-gl": "^3.16.0",
     "react": "^19.2.0",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.2.0",
     "react-google-autocomplete": "^2.7.5"
   },

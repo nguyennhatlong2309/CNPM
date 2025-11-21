@@ -1,0 +1,228 @@
+/* Reset / base styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background-color: #f0f7ff;
+  color: #222;
+}
+
+.incident-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 40px;
+  overflow-y: auto;
+}
+
+.incident-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+/* Main content */
+main {
+  flex: 1;
+  padding: 24px 48px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.search-bar input {
+  width: 280px;
+  padding: 7px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* Button */
+.btn {
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.create-btn {
+  background-color: #3278ff;
+  margin-bottom: 18px;
+}
+
+.create-btn:hover {
+  background-color: #275dc2;
+}
+
+.edit-btn {
+  background-color: #3278ff;
+  padding: 12px 28px;
+}
+
+.edit-btn:hover {
+  background-color: #275dc2;
+}
+
+/* Table styles */
+.incident-table {
+  display: flex;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  font-size: 15px;
+  flex: 1;
+
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.incident-table-header {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #f3f6ff;
+  min-width: 600px;
+  font-size: 1rem;
+  user-select: none;
+  padding: 14px 18px;
+  background-color: white;
+  font-weight: 700;
+  border-bottom: 2px solid #4f93f7;
+}
+
+.incident-table-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.incident-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  min-width: 600px;
+  font-size: 1rem;
+  user-select: none;
+  margin: 5px 0px;
+  background-color: white;
+  border-bottom: 1px solid #f1f1f1;
+  cursor: pointer;
+}
+
+.incident-row.selected,
+.incident-row:hover {
+  background-color: #dbefff;
+}
+
+.incident-table-header div,
+.incident-row div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Action buttons in row */
+.action-btn {
+  border: none;
+  background: none;
+  font-size: 18px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  user-select: none;
+  color: #444;
+}
+
+.action-btn.edit:hover {
+  color: #3278ff;
+}
+
+.action-btn.delete:hover {
+  color: #ea3b3b;
+}
+
+/* Incident details section */
+.incident-details {
+  background-color: #fff;
+  margin-top: 24px;
+  padding: 20px 36px;
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.incident-details > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.incident-details strong {
+  font-weight: 700;
+}
+
+.incident-details button {
+  justify-self: end;
+  padding: 12px 28px;
+  border-radius: 8px;
+}
+
+/* Icons placeholders (optional) */
+/* You can replace these with SVG or icon fonts */
+.icon-home::before {
+  content: "🏠";
+}
+
+.icon-bus::before {
+  content: "🚌";
+}
+
+.icon-driver::before {
+  content: "👨‍✈️";
+}
+
+.icon-student::before {
+  content: "🎓";
+}
+
+.icon-route::before {
+  content: "📍";
+}
+
+.icon-schedule::before {
+  content: "📅";
+}
+
+.icon-incident::before {
+  content: "📋";
+}
+
+.icon-message::before {
+  content: "💬";
+}
+
+.icon-bell::before {
+  content: "🔔";
+}

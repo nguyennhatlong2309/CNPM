@@ -15,67 +15,22 @@ html,
 }
 
 /* Container chính */
-.student-management-container {
-  display: flex;
-  height: 100vh;
-}
-
-/* Sidebar bên trái */
-.sidebar {
-  width: 220px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  padding: 30px 20px;
+.student-content {
+  flex: 1;
+  padding: 0 40px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
-.logo {
-  font-weight: 700;
-  font-size: 1.6rem;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Menu Sidebar */
-.sidebar nav ul {
-  list-style: none;
-}
-
-.sidebar nav ul li {
-  padding: 12px 16px;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  color: #000;
-}
-
-.sidebar nav ul li.active,
-.sidebar nav ul li:hover {
-  background-color: #bbd3ff;
-  color: #3366ff;
-  font-weight: 700;
-}
-
-/* Phần chính */
-
-/* Header */
-header {
+.student-content-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.search-input {
+.student-search-input {
   width: 280px;
   height: 40px;
   border: none;
@@ -87,46 +42,13 @@ header {
   background-color: white;
 }
 
-.search-input::placeholder {
-  color: #9aa8c0;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #222;
-}
-
-.icon-bell {
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-.avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #c7c7c7 0%, #777 80%);
+.student-search-input::placeholder {
+  border: #9aa8c0;
 }
 
 /* Tiêu đề và nút Thêm */
-.title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
 
-h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #222;
-}
-
-.btn-add {
+.student-btn-add {
   background-color: #4a86ff;
   border: none;
   color: white;
@@ -138,46 +60,60 @@ h1 {
   transition: background-color 0.3s ease;
 }
 
-.btn-add:hover {
+.student-btn-add:hover {
   background-color: #3366ff;
 }
 
 /* Bảng danh sách học sinh */
 .student-table {
+  flex: 1;
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 12px;
-  margin-bottom: 30px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
-
-.student-table thead tr th {
-  text-align: left;
+.student-table-header {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1fr 1fr 0.5fr;
+  min-width: 600px;
+  font-size: 1rem;
+  user-select: none;
+  padding: 14px 18px;
   background-color: white;
-  color: #222;
   font-weight: 700;
-  font-size: 1rem;
-  padding: 14px 18px;
-  border-radius: 12px;
+  border-bottom: 2px solid #4f93f7;
 }
 
-.student-table tbody tr {
+.student-table-header div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.student-table-body {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 0px;
+}
+
+.student-table-row {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1fr 1fr 0.5fr;
+  min-width: 600px;
+  font-size: 1rem;
+  user-select: none;
+  margin: 5px 0px;
   background-color: white;
+  border-bottom: 1px solid #f1f1f1;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 15px rgb(0 0 0 / 0.06);
-  border-radius: 12px;
 }
 
-.student-table tbody tr.selected,
-.student-table tbody tr:hover {
-  background-color: #caddff;
-}
-
-.student-table tbody td {
-  padding: 14px 18px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #222;
+.student-table-row div {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .actions {
@@ -186,7 +122,7 @@ h1 {
   font-size: 1.3rem;
 }
 
-.btn-icon {
+.student-btn-icon {
   border: none;
   background: none;
   cursor: pointer;
@@ -194,7 +130,7 @@ h1 {
   transition: color 0.3s ease;
 }
 
-.btn-icon:hover {
+.student-btn-icon:hover {
   color: #4a86ff;
 }
 
@@ -210,6 +146,8 @@ h1 {
   font-size: 1.1rem;
   font-weight: 600;
   color: #222;
+  height: 30%;
+  margin-bottom: 10px;
 }
 
 .detail-row {
@@ -219,6 +157,10 @@ h1 {
   align-items: center;
   flex-wrap: wrap;
   margin-bottom: 10px;
+}
+
+.student-info-gr {
+  width: 250px;
 }
 
 .detail-row > div {
@@ -233,22 +175,4 @@ h1 {
 .value b {
   font-weight: 700;
   font-size: 1.15rem;
-}
-
-.btn-edit {
-  background-color: #4a86ff;
-  color: white;
-  border: none;
-  border-radius: 14px;
-  padding: 10px 28px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.1rem;
-  margin-left: auto;
-  height: 40px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-edit:hover {
-  background-color: #3366ff;
 }
