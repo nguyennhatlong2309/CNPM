@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Driver",
+    "slug": "driver",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true }
+  }
+}
