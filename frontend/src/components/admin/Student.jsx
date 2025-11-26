@@ -6,9 +6,9 @@ const studentsData = [
     id: 1,
     hoTen: "Trần Minh Hiếu",
     diaChi: "123 ABC",
-    tinhTrang: "Đã đón",
+    tinhTrang: "hoạt động",
     tuyenDuong: "Tuyến A",
-    phuHuynh: "Trần Minh Quang",
+    phuHuynh: "Trần Minh Quang ",
     soDienThoai: "0989542305",
     taiXePhuTrach: "Nguyễn Văn Tài",
     gioDonTra: "Đón 06:45 / Trả 17:10",
@@ -17,7 +17,7 @@ const studentsData = [
     id: 2,
     hoTen: "Nguyễn Thị Lan",
     diaChi: "456 DEF",
-    tinhTrang: "Chưa đón",
+    tinhTrang: "không hoạt động",
     tuyenDuong: "Tuyến B",
     phuHuynh: "Nguyễn Văn An",
     soDienThoai: "0978345678",
@@ -28,7 +28,7 @@ const studentsData = [
     id: 3,
     hoTen: "Lê Văn Cường",
     diaChi: "789 GHI",
-    tinhTrang: "Đã đón",
+    tinhTrang: "hoạt động",
     tuyenDuong: "Tuyến C",
     phuHuynh: "Lê Thị Mai",
     soDienThoai: "0961234567",
@@ -39,7 +39,7 @@ const studentsData = [
     id: 4,
     hoTen: "Trần Văn Minh",
     diaChi: "321 JKL",
-    tinhTrang: "Chưa đón",
+    tinhTrang: "không hoạt động",
     tuyenDuong: "Tuyến D",
     phuHuynh: "Trần Văn Bình",
     soDienThoai: "0909876543",
@@ -50,7 +50,7 @@ const studentsData = [
     id: 5,
     hoTen: "Nguyễn Hòa Bình",
     diaChi: "654 MNO",
-    tinhTrang: "Đã đón",
+    tinhTrang: "hoạt động",
     tuyenDuong: "Tuyến E",
     phuHuynh: "Nguyễn Thị Hoa",
     soDienThoai: "0912345678",
@@ -61,7 +61,7 @@ const studentsData = [
     id: 6,
     hoTen: "Nguyễn Văn Sơn",
     diaChi: "987 PQR",
-    tinhTrang: "Chưa đón",
+    tinhTrang: "không hoạt động",
     tuyenDuong: "Tuyến F",
     phuHuynh: "Nguyễn Văn Hòa",
     soDienThoai: "0923456789",
@@ -72,45 +72,12 @@ const studentsData = [
     id: 7,
     hoTen: "Lê Thị Bích",
     diaChi: "111 STU",
-    tinhTrang: "Đã đón",
+    tinhTrang: "hoạt động",
     tuyenDuong: "Tuyến G",
     phuHuynh: "Lê Văn Trường",
     soDienThoai: "0934567890",
     taiXePhuTrach: "Nguyễn Hữu Công",
     gioDonTra: "Đón 07:40 / Trả 18:00",
-  },
-  {
-    id: 8,
-    hoTen: "Vũ Thị Mai",
-    diaChi: "222 VWX",
-    tinhTrang: "Đã đón",
-    tuyenDuong: "Tuyến H",
-    phuHuynh: "Vũ Văn An",
-    soDienThoai: "0945678901",
-    taiXePhuTrach: "Phan Văn Đạt",
-    gioDonTra: "Đón 07:45 / Trả 18:10",
-  },
-  {
-    id: 9,
-    hoTen: "Phạm Văn Hưng",
-    diaChi: "333 YZA",
-    tinhTrang: "Chưa đón",
-    tuyenDuong: "Tuyến I",
-    phuHuynh: "Phạm Thị Nhung",
-    soDienThoai: "0956789012",
-    taiXePhuTrach: "Trần Văn Mai",
-    gioDonTra: "Đón 07:50 / Trả 18:20",
-  },
-  {
-    id: 10,
-    hoTen: "Trần Thị Kim",
-    diaChi: "444 BCD",
-    tinhTrang: "Đã đón",
-    tuyenDuong: "Tuyến J",
-    phuHuynh: "Trần Văn Đạt",
-    soDienThoai: "0967890123",
-    taiXePhuTrach: "Lê Hồng Phúc",
-    gioDonTra: "Đón 08:00 / Trả 18:30",
   },
 ];
 
@@ -141,7 +108,7 @@ export default function StudentManagement() {
           <div>STT</div>
           <div>Họ tên học sinh</div>
           <div>Địa chỉ</div>
-          <div>Tình trạng</div>
+          <div>Trạng thái</div>
           <div>Thao tác</div>
         </div>
         <div className="student-table-body">
@@ -203,9 +170,9 @@ export default function StudentManagement() {
           </div>
 
           <div className="student-info-gr">
-            <div className="label">Địa chỉ</div>
+            <div className="label">Điểm đón/trả</div>
             <div className="value">
-              <b>{selectedStudent.diaChi}</b>
+              <b>{selectedStudent.diaChi} - 123a</b>
             </div>
           </div>
           <div className="student-info-gr">

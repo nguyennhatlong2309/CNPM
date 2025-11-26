@@ -27,6 +27,7 @@ html,
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: 10px;
   padding: 0;
 }
 
@@ -37,7 +38,7 @@ html,
   margin-top: 0;
 }
 
-.route-header .btn-add {
+.route-btn-add {
   background-color: #4a86ff;
   color: white;
   padding: 12px 28px;

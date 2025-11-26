@@ -111,7 +111,7 @@ function RouteManagement() {
           placeholder="Tìm kiếm"
           className="route-search-input"
         />
-        <button className="btn-add">+ Thêm tuyến</button>
+        <button className="route-btn-add">+ Thêm tuyến</button>
       </div>
 
       <div className="route-table">

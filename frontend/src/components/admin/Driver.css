@@ -140,6 +140,8 @@ html,
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   margin-bottom: 10px;
+  height: 30%;
+  max-height: auto;
 }
 
 /* Avatar lớn */
@@ -173,7 +175,7 @@ html,
 .driver-info-group {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 300px;
 }
 
 .driver-info-label {

@@ -1,141 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./Driver.css";
 
-const driversData = [
+const API = "http://localhost:8081/api/";
+
+async function getDataDrivers() {
+  try {
+    const res = await axios.get(`${API}drivers`);
+    console.log("Dữ liệu:", res.data);
+    return res.data;
+  } catch (err) {
+    console.error("Lỗi:", err);
+    return null;
+  }
+}
+
+const examData = [
   {
-    id: 1,
-    hoTen: "Nguyễn Văn Tài",
-    bienSo: "SKS-1234",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến A",
-    lichLamViec: "Ca sáng (06:30 - 08:00)",
-    soDienThoai: "0989542305",
+    driverId: 1,
+    driverName: "Nguyễn Văn Tài",
+    plateNum: "SKS-1234",
+    status: "Đang chạy",
+    defaultRoute: "Tuyến A",
+    starTime: "Ca sáng (06:30 - 08:00)",
+    phoneNum: "0989542305",
   },
   {
-    id: 2,
-    hoTen: "Trần Văn Lợi",
-    bienSo: "NTT-3521",
-    trangThai: "Nghỉ",
-    tuyenDuong: "Tuyến B",
-    lichLamViec: "Không có ca làm việc",
-    soDienThoai: "0912345678",
+    driverId: 2,
+    driverName: "Trần Văn Lợi",
+    plateNum: "NTT-3521",
+    status: "Nghỉ",
+    defaultRoute: "Tuyến B",
+    starTime: "Không có ca làm việc",
+    phoneNum: "0912345678",
   },
   {
-    id: 3,
-    hoTen: "Dương Hoàng Nam",
-    bienSo: "ABC-4567",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến C",
-    lichLamViec: "Ca chiều (14:00 - 16:30)",
-    soDienThoai: "0908765432",
-  },
-  {
-    id: 4,
-    hoTen: "Lê Hoàng Long",
-    bienSo: "TTT-115",
-    trangThai: "Gặp sự cố",
-    tuyenDuong: "Tuyến D",
-    lichLamViec: "Ca tối (18:30 - 20:30)",
-    soDienThoai: "0977123456",
-  },
-  {
-    id: 1,
-    hoTen: "Nguyễn Văn Tài",
-    bienSo: "SKS-1234",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến A",
-    lichLamViec: "Ca sáng (06:30 - 08:00)",
-    soDienThoai: "0989542305",
-  },
-  {
-    id: 2,
-    hoTen: "Trần Văn Lợi",
-    bienSo: "NTT-3521",
-    trangThai: "Nghỉ",
-    tuyenDuong: "Tuyến B",
-    lichLamViec: "Không có ca làm việc",
-    soDienThoai: "0912345678",
-  },
-  {
-    id: 3,
-    hoTen: "Dương Hoàng Nam",
-    bienSo: "ABC-4567",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến C",
-    lichLamViec: "Ca chiều (14:00 - 16:30)",
-    soDienThoai: "0908765432",
-  },
-  {
-    id: 4,
-    hoTen: "Lê Hoàng Long",
-    bienSo: "TTT-115",
-    trangThai: "Gặp sự cố",
-    tuyenDuong: "Tuyến D",
-    lichLamViec: "Ca tối (18:30 - 20:30)",
-    soDienThoai: "0977123456",
-  },
-  {
-    id: 3,
-    hoTen: "Dương Hoàng Nam",
-    bienSo: "ABC-4567",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến C",
-    lichLamViec: "Ca chiều (14:00 - 16:30)",
-    soDienThoai: "0908765432",
-  },
-  {
-    id: 4,
-    hoTen: "Lê Hoàng Long",
-    bienSo: "TTT-115",
-    trangThai: "Gặp sự cố",
-    tuyenDuong: "Tuyến D",
-    lichLamViec: "Ca tối (18:30 - 20:30)",
-    soDienThoai: "0977123456",
-  },
-  {
-    id: 1,
-    hoTen: "Nguyễn Văn Tài",
-    bienSo: "SKS-1234",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến A",
-    lichLamViec: "Ca sáng (06:30 - 08:00)",
-    soDienThoai: "0989542305",
-  },
-  {
-    id: 2,
-    hoTen: "Trần Văn Lợi",
-    bienSo: "NTT-3521",
-    trangThai: "Nghỉ",
-    tuyenDuong: "Tuyến B",
-    lichLamViec: "Không có ca làm việc",
-    soDienThoai: "0912345678",
-  },
-  {
-    id: 3,
-    hoTen: "Dương Hoàng Nam",
-    bienSo: "ABC-4567",
-    trangThai: "Đang chạy",
-    tuyenDuong: "Tuyến C",
-    lichLamViec: "Ca chiều (14:00 - 16:30)",
-    soDienThoai: "0908765432",
-  },
-  {
-    id: 4,
-    hoTen: "Lê Hoàng Long",
-    bienSo: "TTT-115",
-    trangThai: "Gặp sự cố",
-    tuyenDuong: "Tuyến D",
-    lichLamViec: "Ca tối (18:30 - 20:30)",
-    soDienThoai: "0977123456",
+    driverId: 3,
+    driverName: "Dương Hoàng Nam",
+    plateNum: "ABC-4567",
+    status: "Đang chạy",
+    defaultRoute: "Tuyến C",
+    starTime: "Ca chiều (14:00 - 16:30)",
+    phoneNum: "0908765432",
   },
 ];
 
 function DriverManagement() {
-  const [selectedDriverId, setSelectedDriverId] = useState(driversData[0].id);
+  const [selectedDriverId, setSelectedDriverId] = useState(
+    examData[0].driverId
+  );
+  const [driversData, setDriversData] = useState(examData);
 
   const selectedDriver = driversData.find(
-    (driver) => driver.id === selectedDriverId
+    (driver) => driver.driverId === selectedDriverId
   );
+
+  useEffect(() => {
+    async function loadData() {
+      const data = await getDataDrivers();
+      if (data) setDriversData(data);
+    }
+    loadData();
+  }, []);
 
   return (
     <div className="driver-content">
@@ -162,16 +88,16 @@ function DriverManagement() {
             <div
               key={index}
               className={
-                selectedDriverId === driver.id
+                selectedDriverId === driver.driverId
                   ? "driver-row selected"
                   : "driver-row"
               }
-              onClick={() => setSelectedDriverId(driver.id)}
+              onClick={() => setSelectedDriverId(driver.driverId)}
             >
               <div>{index + 1}</div>
-              <div>{driver.hoTen}</div>
-              <div>{driver.bienSo}</div>
-              <div>{driver.trangThai}</div>
+              <div>{driver.driverName}</div>
+              <div>{driver.plateNum}</div>
+              <div>{driver.status}</div>
 
               <div className="driver-actions">
                 <button className="driver-btn-icon">✏️</button>
@@ -198,41 +124,39 @@ function DriverManagement() {
             <div className="driver-info-group">
               <div className="driver-info-label">Họ tên</div>
               <div className="driver-info-value">
-                <b>{selectedDriver.hoTen}</b>
+                <b>{selectedDriver.driverName}</b>
               </div>
             </div>
 
             <div className="driver-info-group">
               <div className="driver-info-label">Trạng thái</div>
               <div className="driver-info-value">
-                <b>{selectedDriver.trangThai}</b>
+                <b>{selectedDriver.status}</b>
               </div>
             </div>
 
             <div className="driver-info-group">
               <div className="driver-info-label">Tuyến đường</div>
               <div className="driver-info-value">
-                {selectedDriver.tuyenDuong}
+                {selectedDriver.defaultRoute}
               </div>
             </div>
 
             <div className="driver-info-group">
-              <div className="driver-info-label">Lịch làm việc hôm nay</div>
+              <div className="driver-info-label">Giờ làm việc</div>
               <div className="driver-info-value">
-                <b>{selectedDriver.lichLamViec}</b>
+                <b>{selectedDriver.starTime}</b>
               </div>
             </div>
 
             <div className="driver-info-group">
               <div className="driver-info-label">Biển số</div>
-              <div className="driver-info-value">{selectedDriver.bienSo}</div>
+              <div className="driver-info-value">{selectedDriver.plateNum}</div>
             </div>
 
             <div className="driver-info-group">
               <div className="driver-info-label">Số điện thoại</div>
-              <div className="driver-info-value">
-                {selectedDriver.soDienThoai}
-              </div>
+              <div className="driver-info-value">{selectedDriver.phoneNum}</div>
             </div>
           </div>
         </div>

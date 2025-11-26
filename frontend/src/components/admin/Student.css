@@ -28,6 +28,7 @@ html,
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 5px;
 }
 
 .student-search-input {
@@ -38,8 +39,12 @@ html,
   padding: 0 20px;
   font-size: 1rem;
   outline: none;
-  box-shadow: 0 2px 12px rgba(15, 30, 85, 0.1);
+  /* box-shadow: 0 2px 12px rgba(15, 30, 85, 0.1); */
+  border: 1px solid #ccd6dd;
   background-color: white;
+}
+.student-search-input:focus {
+  border-color: #4f93f7;
 }
 
 .student-search-input::placeholder {

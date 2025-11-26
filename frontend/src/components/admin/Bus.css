@@ -77,7 +77,7 @@ html,
 /* Fixed header */
 .bus-table-header {
   display: grid;
-  grid-template-columns: 60px 2fr 2fr 2fr 2fr;
+  grid-template-columns: 1fr 2fr 2fr 2fr 2fr;
   min-width: 600px;
   font-size: 1rem;
   user-select: none;
@@ -106,7 +106,8 @@ html,
   margin: 5px 0;
   text-align: center;
 }
-.bus-table-header .bus-table-row div {
+.bus-table-header div,
+.bus-table-row div {
   display: flex;
   justify-content: center;
   text-align: center;
@@ -184,4 +185,45 @@ html,
 
 .bus-btn-edit:hover {
   background-color: #3577d1;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
+
+.popup-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.popup-form input,
+.popup-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.popup-buttons {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.popup-buttons button {
+  margin-left: 10px;
+  padding: 8px 16px;
 }
