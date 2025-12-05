@@ -1,95 +1,123 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./Student.css";
 
 const studentsData = [
   {
-    id: 1,
-    hoTen: "Trần Minh Hiếu",
-    diaChi: "123 ABC",
-    tinhTrang: "hoạt động",
-    tuyenDuong: "Tuyến A",
-    phuHuynh: "Trần Minh Quang ",
-    soDienThoai: "0989542305",
-    taiXePhuTrach: "Nguyễn Văn Tài",
-    gioDonTra: "Đón 06:45 / Trả 17:10",
+    studentId: 1,
+    name: "Trần Minh Hiếu",
+    defaultPickUpPointName: "123 ABCC",
+    defaultDropOffPointName: "123 ABCC",
+    status: "hoạt động",
+    route: "Tuyến A",
+    parentName: "Trần Minh Quang ",
+    parentNum: "0989542305",
+    defaultTimePickUp: "Đón 06:45",
+    defaultTimeDropOff: "Trả 17:10",
   },
   {
-    id: 2,
-    hoTen: "Nguyễn Thị Lan",
-    diaChi: "456 DEF",
-    tinhTrang: "không hoạt động",
-    tuyenDuong: "Tuyến B",
-    phuHuynh: "Nguyễn Văn An",
-    soDienThoai: "0978345678",
-    taiXePhuTrach: "Trần Văn Hùng",
-    gioDonTra: "Đón 07:00 / Trả 17:15",
+    studentId: 2,
+    name: "Nguyễn Thị Lan",
+    defaultPickUpPointName: "456 DEF",
+    defaultDropOffPointName: "456 DEF",
+    status: "không hoạt động",
+    route: "Tuyến B",
+    parentName: "Nguyễn Văn An",
+    parentNum: "0978345678",
+    defaultTimePickUp: "Đón 07:00",
+    defaultTimeDropOff: "Trả 17:15",
   },
   {
-    id: 3,
-    hoTen: "Lê Văn Cường",
-    diaChi: "789 GHI",
-    tinhTrang: "hoạt động",
-    tuyenDuong: "Tuyến C",
-    phuHuynh: "Lê Thị Mai",
-    soDienThoai: "0961234567",
-    taiXePhuTrach: "Phạm Văn Toàn",
-    gioDonTra: "Đón 06:50 / Trả 17:20",
+    studentId: 3,
+    name: "Lê Văn Cường",
+    defaultPickUpPointName: "789 GHI",
+    defaultDropOffPointName: "789 GHI",
+    status: "hoạt động",
+    route: "Tuyến C",
+    parentName: "Lê Thị Mai",
+    parentNum: "0961234567",
+    defaultTimePickUp: "Đón 06:50",
+    defaultTimeDropOff: "Trả 17:15",
   },
   {
-    id: 4,
-    hoTen: "Trần Văn Minh",
-    diaChi: "321 JKL",
-    tinhTrang: "không hoạt động",
-    tuyenDuong: "Tuyến D",
-    phuHuynh: "Trần Văn Bình",
-    soDienThoai: "0909876543",
-    taiXePhuTrach: "Nguyễn Văn Dũng",
-    gioDonTra: "Đón 07:10 / Trả 17:30",
+    studentId: 4,
+    name: "Trần Văn Minh",
+    defaultPickUpPointName: "321 JKL",
+    defaultDropOffPointName: "321 JKL",
+    status: "không hoạt động",
+    route: "Tuyến D",
+    parentName: "Trần Văn Bình",
+    parentNum: "0909876543",
+    defaultTimePickUp: "Đón 07:10",
+    defaultTimeDropOff: "Trả 17:15",
   },
   {
-    id: 5,
-    hoTen: "Nguyễn Hòa Bình",
-    diaChi: "654 MNO",
-    tinhTrang: "hoạt động",
-    tuyenDuong: "Tuyến E",
-    phuHuynh: "Nguyễn Thị Hoa",
-    soDienThoai: "0912345678",
-    taiXePhuTrach: "Lê Văn Kiệt",
-    gioDonTra: "Đón 07:20 / Trả 17:40",
+    studentId: 5,
+    name: "Nguyễn Hòa Bình",
+    defaultPickUpPointName: "654 MNO",
+    defaultDropOffPointName: "654 MNO",
+    status: "hoạt động",
+    route: "Tuyến E",
+    parentName: "Nguyễn Thị Hoa",
+    parentNum: "0912345678",
+    defaultTimePickUp: "Đón 07:20",
+    defaultTimeDropOff: "Trả 17:15",
   },
   {
-    id: 6,
-    hoTen: "Nguyễn Văn Sơn",
-    diaChi: "987 PQR",
-    tinhTrang: "không hoạt động",
-    tuyenDuong: "Tuyến F",
-    phuHuynh: "Nguyễn Văn Hòa",
-    soDienThoai: "0923456789",
-    taiXePhuTrach: "Trần Quốc Huy",
-    gioDonTra: "Đón 07:30 / Trả 17:50",
+    studentId: 6,
+    name: "Nguyễn Văn Sơn",
+    defaultPickUpPointName: "987 PQR",
+    defaultDropOffPointName: "987 PQR",
+    status: "không hoạt động",
+    route: "Tuyến F",
+    parentName: "Nguyễn Văn Hòa",
+    parentNum: "0923456789",
+    defaultTimePickUp: "Đón 07:30",
+    defaultTimeDropOff: "Trả 17:15",
   },
   {
-    id: 7,
-    hoTen: "Lê Thị Bích",
-    diaChi: "111 STU",
-    tinhTrang: "hoạt động",
-    tuyenDuong: "Tuyến G",
-    phuHuynh: "Lê Văn Trường",
-    soDienThoai: "0934567890",
-    taiXePhuTrach: "Nguyễn Hữu Công",
-    gioDonTra: "Đón 07:40 / Trả 18:00",
+    studentId: 7,
+    name: "Lê Thị Bích",
+    defaultPickUpPointName: "111 STU",
+    defaultDropOffPointName: "111 STU",
+    status: "hoạt động",
+    route: "Tuyến G",
+    parentName: "Lê Văn Trường",
+    parentNum: "0934567890",
+    defaultTimePickUp: "Đón 07:40",
+    defaultTimeDropOff: "Trả 17:15",
   },
 ];
+const API = "http://localhost:8081/api/";
+
+async function getDataStudents() {
+  try {
+    const res = await axios.get(`${API}students`);
+    console.log("Dữ liệu:", res.data);
+    return res.data;
+  } catch (err) {
+    console.error("Lỗi:", err);
+    return null;
+  }
+}
 
 export default function StudentManagement() {
-  const [students] = useState(studentsData);
-  const [selectedId, setSelectedId] = useState(studentsData[0].id);
+  const [students, setDataStudents] = useState(studentsData);
+  const [selectedId, setSelectedId] = useState(studentsData[0].studentId);
 
-  const selectedStudent = students.find((st) => st.id === selectedId);
+  const selectedStudent = students.find((st) => st.studentId === selectedId);
 
-  const handleSelectStudent = (id) => {
-    setSelectedId(id);
+  const handleSelectStudent = (studentId) => {
+    setSelectedId(studentId);
   };
+
+  // useEffect(() => {
+  //   async function loadData() {
+  //     const data = await getDataStudents();
+  //     if (data) setDataStudents(data);
+  //   }
+  //   loadData();
+  // }, []);
 
   return (
     <div className="student-content">
@@ -107,36 +135,38 @@ export default function StudentManagement() {
         <div className="student-table-header">
           <div>STT</div>
           <div>Họ tên học sinh</div>
-          <div>Địa chỉ</div>
+          <div>Điểm đón</div>
+          <div>điểm trả</div>
           <div>Trạng thái</div>
           <div>Thao tác</div>
         </div>
         <div className="student-table-body">
           {students.map((student, idx) => (
             <div
-              key={student.id}
+              key={student.studentId}
               className={
-                selectedId === student.id
+                selectedId === student.studentId
                   ? "selected student-table-row"
                   : "student-table-row"
               }
-              onClick={() => handleSelectStudent(student.id)}
+              onClick={() => handleSelectStudent(student.studentId)}
               tabIndex={0}
-              aria-selected={selectedId === student.id}
+              aria-selected={selectedId === student.studentId}
             >
               <div>{idx + 1}</div>
-              <div>{student.hoTen}</div>
-              <div>{student.diaChi}</div>
-              <div>{student.tinhTrang}</div>
+              <div>{student.name}</div>
+              <div>{student.defaultPickUpPointName}</div>
+              <div>{student.defaultDropOffPointName}</div>
+              <div>{student.status}</div>
               <div className="actions">
                 <button
-                  aria-label={`Chỉnh sửa ${student.hoTen}`}
+                  aria-label={`Chỉnh sửa ${student.name}`}
                   className="student-btn-icon"
                 >
                   ✏️
                 </button>
                 <button
-                  aria-label={`Xóa ${student.hoTen}`}
+                  aria-label={`Xóa ${student.name}`}
                   className="student-btn-icon"
                 >
                   🗑️
@@ -152,52 +182,58 @@ export default function StudentManagement() {
           <div className="student-info-gr">
             <div className="label">Họ tên</div>
             <div className="value">
-              <b>{selectedStudent.hoTen}</b>
+              <b>{selectedStudent.name}</b>
+            </div>
+          </div>
+          <div className="student-info-gr">
+            <div className="label">Phụ huynh</div>
+            <div className="value">
+              <b>{selectedStudent.parentName || ""}</b>
+            </div>
+          </div>
+
+          <div className="student-info-gr">
+            <div className="label">Số điện thoại</div>
+            <div className="value">
+              <b>{selectedStudent.parentNum || ""}</b>
+            </div>
+          </div>
+
+          <div className="student-info-gr">
+            <div className="label">Trạng thái</div>
+            <div className="value">
+              <b>{selectedStudent.status}</b>
             </div>
           </div>
 
           <div className="student-info-gr">
             <div className="label">Tuyến đường</div>
             <div className="value">
-              <b>{selectedStudent.tuyenDuong || "Tuyến A"}</b>
-            </div>
-          </div>
-          <div className="student-info-gr">
-            <div className="label">Trạng thái</div>
-            <div className="value">
-              <b>{selectedStudent.tinhTrang}</b>
+              <b>{selectedStudent.route || "Tuyến A"}</b>
             </div>
           </div>
 
           <div className="student-info-gr">
-            <div className="label">Điểm đón/trả</div>
+            <div className="label">Điểm đón</div>
             <div className="value">
-              <b>{selectedStudent.diaChi} - 123a</b>
-            </div>
-          </div>
-          <div className="student-info-gr">
-            <div className="label">Phụ huynh</div>
-            <div className="value">
-              <b>{selectedStudent.phuHuynh || ""}</b>
-            </div>
-          </div>
-          <div className="student-info-gr">
-            <div className="label">Số điện thoại</div>
-            <div className="value">
-              <b>{selectedStudent.soDienThoai || ""}</b>
+              <b>{selectedStudent.defaultPickUpPointName}</b>
             </div>
           </div>
 
           <div className="student-info-gr">
-            <div className="label">Tài xế phụ trách</div>
+            <div className="label">Điểm trả</div>
             <div className="value">
-              <b>{selectedStudent.taiXePhuTrach || ""}</b>
+              <b>{selectedStudent.defaultDropOffPointName}</b>
             </div>
           </div>
+
           <div className="student-info-gr">
             <div className="label">Giờ đón/trả</div>
             <div className="value">
-              <b>{selectedStudent.gioDonTra || ""}</b>
+              <b>
+                {`${selectedStudent.defaultTimePickUp} / ${selectedStudent.defaultTimeDropOff}` ||
+                  ""}
+              </b>
             </div>
           </div>
         </div>

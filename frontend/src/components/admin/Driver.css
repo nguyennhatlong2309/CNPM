@@ -197,3 +197,82 @@ html,
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Popup Overlay */
+.driver-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup Content */
+.driver-popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.driver-popup-content h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.driver-form-group {
+  margin-bottom: 15px;
+}
+
+.driver-form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.driver-form-group input,
+.driver-form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.driver-popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.driver-popup-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.driver-popup-actions button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.driver-popup-actions button:last-child {
+  background-color: #f44336;
+  color: white;
+}
+
+.driver-form-group input,
+.driver-popup-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 4px; /* Bo góc input một chút */
+  border: 1px solid #ddd;
+}

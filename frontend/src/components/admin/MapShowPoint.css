@@ -1,0 +1,135 @@
+.map-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.MSP-sidebar {
+  width: 320px;
+  background: #ffffff;
+  padding: 12px;
+  overflow-y: auto;
+  border-right: 1px solid #e0e0e0;
+
+  position: relative;
+  z-index: 20;
+
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.geocoder-container .mapboxgl-ctrl-geocoder {
+  width: 100% !important;
+  max-width: 100% !important;
+
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+
+  padding: 4px 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  align-items: start;
+}
+
+.geocoder-container .mapboxgl-ctrl-geocoder input {
+  height: 36px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+
+  font-size: 14px;
+  color: #333;
+
+  padding-left: 6px;
+}
+
+.geocoder-container .mapboxgl-ctrl-geocoder:hover {
+  border-color: #2196f3;
+  box-shadow: 0 2px 10px rgba(33, 150, 243, 0.15);
+}
+
+.mapboxgl-ctrl-geocoder .suggestions {
+  position: absolute !important; /* cho phép nổi lên */
+  top: 42px; /* khoảng cách từ input */
+  left: 0;
+  right: 0;
+  z-index: 30; /* cao hơn danh sách marker */
+  display: flex;
+  flex-direction: column; /* hướng dọc */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  background: #fff;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions ul {
+  display: flex;
+  flex-direction: column; /* hướng dọc */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mapboxgl-ctrl-geocoder .suggestions li {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions li:last-child {
+  border-bottom: none;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions li:hover {
+  background: #f0f7ff;
+}
+
+/* Ngăn mapbox style xấu đè lên */
+.mapboxgl-ctrl {
+  box-shadow: none !important;
+}
+
+/* Danh sách marker */
+.marker-item {
+  padding: 10px;
+  background: #f7f7f7;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid #2196f3;
+  cursor: grab;
+}
+
+.marker-item:active {
+  cursor: grabbing;
+}
+
+.stt {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Nút Move Up */
+.marker-item button {
+  padding: 6px 10px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.marker-item button:hover {
+  background: #1976d2;
+}
+
+/* Map bên phải */
+.map {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}

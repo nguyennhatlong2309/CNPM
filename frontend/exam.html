@@ -1,133 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Tuyến đường từ Đại học Sài Gòn đến Đại học Bách Khoa</title>
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapbox Autocomplete HCM</title>
+
     <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css"
       rel="stylesheet"
     />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+
     <style>
-      body {
-        margin: 0;
+      #searchBox {
+        width: 300px;
+        padding: 8px;
+        margin-bottom: 4px;
+      }
+      #suggestions {
+        width: 300px;
+        background: white;
+        border: 1px solid #ddd;
+        list-style: none;
         padding: 0;
+        margin-top: 0;
+        position: absolute;
+        z-index: 999;
+      }
+      #suggestions li {
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      #suggestions li:hover {
+        background: #f0f0f0;
       }
       #map {
-        width: 80vw;
-        height: 80vh;
-        position: absolute;
-        top: 0;
-        bottom: 0;
         width: 100%;
+        height: 450px;
+        margin-top: 20px;
       }
     </style>
   </head>
+
   <body>
+    <h2>Autocomplete – Giới hạn trong TP.HCM + Tìm chính xác số nhà</h2>
+
+    <input id="searchBox" type="text" placeholder="Nhập địa điểm..." />
+    <ul id="suggestions"></ul>
+
     <div id="map"></div>
+
     <script>
-      // Thay thế bằng Mapbox Access Token của bạn
       mapboxgl.accessToken =
         "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
 
-      // Khởi tạo bản đồ, trung tâm giữa hai điểm
       const map = new mapboxgl.Map({
         container: "map",
         style: "mapbox://styles/mapbox/streets-v12",
-        center: [106.6708, 10.7676], // Trung tâm giữa hai điểm
-        zoom: 13,
+        center: [106.700981, 10.776889],
+        zoom: 12,
       });
 
-      // Tọa độ điểm xuất phát và đích
-      const start = [106.682, 10.7626]; // Đại học Sài Gòn
-      const end = [106.6597, 10.7725]; // Đại học Bách Khoa
+      let marker;
 
-      const end1 = [106.699, 10.779]; // Bưu điện TP.HCM
-      // Gọi Directions API để lấy tuyến đường
-      async function getRoute() {
-        const query = await fetch(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
-          { method: "GET" }
-        );
-        const json = await query.json();
-        const data = json.routes[0];
-        console.log(data.distance);
-        const route = data.geometry.coordinates;
+      // BBOX TP.HCM
+      const HCM_BBOX = "106.3650,10.3450,106.9845,11.1600";
+      const HCM_CENTER = "106.700981,10.776889";
 
-        // Thêm tuyến đường lên bản đồ
-        map.addLayer({
-          id: "route",
-          type: "line",
-          source: {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "LineString",
-                coordinates: route,
-              },
-            },
-          },
-          layout: {
-            "line-join": "round",
-            "line-cap": "round",
-          },
-          paint: {
-            "line-color": "#0616FF",
-            "line-width": 5,
-            "line-opacity": 0.75,
-          },
-        });
+      // Mapbox fetch
+      async function fetchSuggestions(query) {
+        const url =
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json` +
+          `?types=address` +
+          `&autocomplete=true` +
+          `&country=vn` +
+          `&bbox=${HCM_BBOX}` +
+          `&proximity=${HCM_CENTER}` +
+          `&access_token=${mapboxgl.accessToken}`;
 
-        // Thêm điểm xuất phát và đích
-        map.addLayer({
-          id: "start",
-          type: "circle",
-          source: {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: start,
-              },
-            },
-          },
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#f30",
-          },
-        });
-
-        map.addLayer({
-          id: "end",
-          type: "circle",
-          source: {
-            type: "geojson",
-            data: {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: end,
-              },
-            },
-          },
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#0f0",
-          },
-        });
+        const res = await fetch(url);
+        const data = await res.json();
+        return data.features;
       }
 
-      // Chờ bản đồ tải xong rồi vẽ tuyến đường
-      map.on("load", () => {
-        getRoute();
-      });
+      // Google fallback
+      async function googleGeocode(address) {
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+          address
+        )}&key=YOUR_GOOGLE_KEY`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.status === "OK") {
+          const loc = data.results[0].geometry.location;
+          return {
+            lng: loc.lng,
+            lat: loc.lat,
+            source: "google",
+          };
+        }
+        return null;
+      }
+
+      // Autocomplete xử lý
+      document
+        .getElementById("searchBox")
+        .addEventListener("input", async (e) => {
+          const text = e.target.value.trim();
+          const list = document.getElementById("suggestions");
+          list.innerHTML = "";
+
+          if (text.length < 2) return;
+
+          const results = await fetchSuggestions(text);
+
+          results.forEach((place) => {
+            const li = document.createElement("li");
+            li.textContent = place.place_name;
+
+            li.onclick = async () => {
+              let [lng, lat] = place.geometry.coordinates;
+
+              // 🔥 Kiểm tra có số nhà thật không (Regex)
+              const hasRealHouseNumber = /^[0-9]+\s+/.test(place.place_name);
+
+              let finalLng = lng;
+              let finalLat = lat;
+              let source = "mapbox";
+
+              // ❗ Mapbox không có số nhà → fallback Google
+              if (!hasRealHouseNumber) {
+                const googleData = await googleGeocode(place.place_name);
+                if (googleData) {
+                  finalLng = googleData.lng;
+                  finalLat = googleData.lat;
+                  source = "google";
+                }
+              }
+
+              map.flyTo({ center: [finalLng, finalLat], zoom: 16 });
+
+              if (marker) marker.remove();
+              marker = new mapboxgl.Marker()
+                .setLngLat([finalLng, finalLat])
+                .addTo(map);
+
+              console.log("Marker from:", source);
+
+              document.getElementById("searchBox").value = place.place_name;
+              list.innerHTML = "";
+            };
+
+            list.appendChild(li);
+          });
+        });
     </script>
   </body>
 </html>

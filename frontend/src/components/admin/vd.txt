@@ -1,0 +1,7 @@
+dựa vào listWeek và selectedWeekID để lấy startDate và endDate ->
+-> danh sách những ngày trong tuần dayInWeek -> render vào header
+-> danh sách trip trong tuần đó -> render vào table
+
+
+lấy day in week fill vào header 
+

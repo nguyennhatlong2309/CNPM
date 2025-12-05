@@ -1,66 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <title>Mapbox Click to Get Coordinates</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      #info {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
   </head>
   <body>
-    <select id="weekSelect"></select>
+    <div id="map"></div>
+    <div id="info">Click trên bản đồ để lấy tọa độ!</div>
 
     <script>
-      function getMonday(date) {
-        const d = new Date(date);
-        const day = d.getDay();
-        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-        return new Date(d.setDate(diff));
-      }
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
 
-      function format(d) {
-        return d.toLocaleDateString("vi-VN", {
-          day: "2-digit",
-          month: "2-digit",
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/streets-v11",
+        center: [105.8342, 21.0278],
+        zoom: 10,
+      });
+
+      const markers = [];
+
+      map.on("click", (e) => {
+        const lngLat = e.lngLat;
+
+        document.getElementById(
+          "info"
+        ).innerHTML = `Tọa độ: Kinh độ ${lngLat.lng.toFixed(
+          4
+        )}, Vĩ độ ${lngLat.lat.toFixed(4)}`;
+
+        const marker = new mapboxgl.Marker().setLngLat(lngLat).addTo(map);
+
+        markers.push(marker);
+
+        // Khi click phải lên marker thì xóa nó
+        marker.getElement().addEventListener("contextmenu", (evt) => {
+          evt.preventDefault();
+          marker.remove();
+
+          const index = markers.indexOf(marker);
+          if (index > -1) markers.splice(index, 1);
         });
-      }
-
-      const select = document.getElementById("weekSelect");
-      let monday = getMonday(new Date()); // tuần hiện tại
-
-      for (let i = 0; i < 10; i++) {
-        // tạo 10 tuần
-        let start = new Date(monday);
-        let end = new Date(monday);
-        end.setDate(start.getDate() + 6);
-
-        let option = document.createElement("option");
-        option.value = `${start.toISOString().split("T")[0]}_${
-          end.toISOString().split("T")[0]
-        }`;
-        option.textContent = `${format(start)} - ${format(end)}`;
-
-        select.appendChild(option);
-
-        // sang tuần tiếp theo
-        monday.setDate(monday.getDate() + 7);
-      }
-      //   {
-      //     start: [106.682, 10.7626],
-      //     end: [106.6597, 10.7725],
-      //   },
-      //   {
-      //     start: [10.797543545480988, 106.70361551579074],
-      //     end: [10.79103550113593, 106.70088406870119],
-      //   },
-      //   {
-      //     start: [10.804989765729758, 106.7170083323355],
-      //     end: [10.792830298172355, 106.7062740491795],
-      //   },
-      //   {
-      //     start: [10.796944379543751, 106.66666391691976],
-      //     end: [10.773743470119438, 106.67791019571969],
-      //   },
-      // ];
+      });
     </script>
   </body>
 </html>
-// list_place = [

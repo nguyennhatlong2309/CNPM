@@ -5,31 +5,29 @@ import "mapbox-gl/dist/mapbox-gl.css";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
 
-// ⚠️ Sửa lại TẤT CẢ toạ độ thành [lng, lat]
-const list_place = [
-  {
-    start: [106.682, 10.7626],
-    end: [106.6597, 10.7725],
-  },
-];
+async function getRoute({ map, places }) {
+  const coordinates = places
+    .map((p) => `${p.longitude},${p.latitude}`)
+    .join(";");
 
-async function getRoute({ map, start, end, index }) {
-  const layerID = `route-${index}`;
-
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
 
   const res = await fetch(url);
   const json = await res.json();
 
-  if (!json.routes || !json.routes[0]) {
-    console.error("No route found for:", start, end);
+  if (!json.routes?.[0]) {
+    console.error("No route found");
     return;
   }
 
   const route = json.routes[0].geometry.coordinates;
 
+  // XÓA LAYER CŨ (tránh lỗi addLayer trùng id)
+  if (map.getLayer("route-line")) map.removeLayer("route-line");
+  if (map.getSource("route-line")) map.removeSource("route-line");
+
   map.addLayer({
-    id: layerID,
+    id: "route-line",
     type: "line",
     source: {
       type: "geojson",
@@ -41,39 +39,91 @@ async function getRoute({ map, start, end, index }) {
         },
       },
     },
-    layout: {
-      "line-cap": "round",
-      "line-join": "round",
-    },
     paint: {
-      "line-color": "#000fe7",
+      "line-color": "rgba(0, 70, 240, 0.9)",
       "line-width": 5,
-      "line-opacity": 0.75,
     },
   });
 }
 
-export default function MapboxDirection() {
+export default function MapboxDirection({ list_points, selectedPoint }) {
   const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+
+  // Tâm bản đồ
+  const lngLatCenter = [
+    selectedPoint?.longitude ?? 106.6708,
+    selectedPoint?.latitude ?? 10.7676,
+  ];
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
+    mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [106.6708, 10.7676],
+      center: lngLatCenter,
       zoom: 13,
     });
 
-    map.on("load", () => {
-      list_place.forEach((p, i) =>
-        getRoute({ map, start: p.start, end: p.end, index: i })
-      );
-    });
-
-    return () => map.remove();
+    return () => mapRef.current?.remove();
   }, []);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const oldMarkers = document.getElementsByClassName("custom-marker");
+    while (oldMarkers.length > 0) oldMarkers[0].remove();
+
+    list_points.forEach((p) => {
+      const isSelected =
+        selectedPoint && p.orderInRoute === selectedPoint.orderInRoute;
+
+      new mapboxgl.Marker({
+        color: isSelected ? "red" : "#9AFFFC",
+      })
+        .setLngLat([p.longitude, p.latitude])
+        .addTo(map);
+
+      const el = document.createElement("div");
+      el.className = "custom-marker";
+      el.style.background = "white";
+      el.style.padding = "2px 5px";
+      el.style.borderRadius = "5px";
+      el.style.fontSize = "12px";
+      el.style.fontWeight = "bold";
+      el.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
+      el.innerText = p.orderInRoute;
+
+      new mapboxgl.Marker({ element: el, anchor: "top" })
+        .setLngLat([p.longitude, p.latitude])
+        .addTo(map);
+    });
+
+    // Route
+    if (list_points.length > 1) {
+      getRoute({ map, places: list_points });
+    }
+
+    // Fly tới điểm được chọn
+    if (selectedPoint) {
+      map.flyTo({
+        center: [selectedPoint.longitude, selectedPoint.latitude],
+        zoom: 14,
+        speed: 1.5,
+      });
+    }
+  }, [list_points, selectedPoint]);
+
   return (
-    <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+    <div
+      ref={mapContainerRef}
+      style={{
+        width: "100%",
+        height: "100%",
+        marginLeft: "5px",
+        marginTop: "10px",
+        marginRight: "5px",
+      }}
+    />
   );
 }

@@ -106,8 +106,6 @@ const Dashboard = () => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
-
-            <Tooltip busInfo={data.busInfo} />
           </div>
         </div>
         <div className="side-info">

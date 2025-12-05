@@ -68,11 +68,17 @@ html,
   border-color: #4f93f7;
 }
 
+.route-content-middle {
+  display: flex;
+  flex-direction: row;
+  height: 90%;
+}
+
 /* Bảng tuyến đường */
 .route-table {
-  flex: 1;
-  width: 100%;
+  width: 40%;
   overflow-x: auto;
+  overflow-y: auto;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -81,11 +87,9 @@ html,
 .route-table-header {
   height: 50px;
   display: grid;
-  grid-template-columns: 60px 0.5fr 1.5fr 0.5fr 0.5fr;
-  min-width: 600px;
+  grid-template-columns: 0.5fr 0.5fr 1fr 1fr;
   font-size: 1rem;
   user-select: none;
-  padding: 10px 0px;
   background-color: white;
   font-weight: 700;
   border-bottom: 2px solid #4f93f7;
@@ -104,8 +108,7 @@ html,
 }
 .route-table-body-row {
   display: grid;
-  grid-template-columns: 60px 0.5fr 1.5fr 0.5fr 0.5fr;
-  min-width: 600px;
+  grid-template-columns: 0.5fr 0.5fr 1fr 1fr;
   font-size: 1rem;
   user-select: none;
   margin: 5px 0px;
@@ -138,36 +141,44 @@ html,
 
 /* Phần bản đồ + chi tiết tuyến */
 .route-detail-section {
-  height: 200px;
+  flex: 1;
   display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
+  margin-right: 10px;
+  box-shadow: 0 7px 25px rgb(30 41 59 / 0.06);
 }
 
 /* Khung bản đồ */
 .route-map-container {
+  height: 100%;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgb(15 30 85 / 0.12);
+  border-radius: 10px 10px 0px 0px;
   position: relative;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
-  flex: 1;
 }
 
 .route-info {
-  flex: 1;
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgb(15 30 85 / 0.12);
-  padding: 26px 26px;
+  height: 290px;
   display: flex;
-  flex-direction: column;
-  gap: 18px;
-  justify-content: center;
-  font-weight: 600;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+  align-content: flex-start;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  overflow-y: auto;
+}
+.route-info div {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  text-align: center;
+  margin: 10px 0px 10px 10px;
 }
 
 .route-info h3 {

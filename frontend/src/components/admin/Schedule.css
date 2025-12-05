@@ -75,7 +75,7 @@ body {
 }
 .schedule-table-header {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: 0.5fr repeat(7, 1fr);
   font-weight: 600;
   background-color: #f3f6ff;
   border-left: none;
@@ -108,7 +108,7 @@ body {
 /* Row */
 .schedule-row {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: 0.5fr repeat(7, 1fr);
   border-bottom: 0.5px solid rgb(0, 0, 0, 0.1);
 }
 
@@ -132,20 +132,22 @@ body {
 }
 
 /* Ô cuối cùng nổi bật */
-
 .schedule-table-cell {
-  border: solid 1px rgb(0, 0, 0, 0.1);
-  margin: 10px;
-  padding: auto;
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
 
+.schedule-table-cell > div {
+  border: solid 1px rgb(0, 0, 0, 0.1);
   height: 80%;
   border-radius: 5px;
   background-color: #eee;
-  text-align: start;
-  padding-left: 5px;
+  padding: 0;
+  margin-top: 10px;
+  padding: 5px 2px;
 }
 
 .empty {
-  background-color: rgb(255, 0, 0, 0.3);
+  background-color: rgb(255, 0, 0, 0.2);
 }

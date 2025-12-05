@@ -80,7 +80,7 @@ html,
 }
 .student-table-header {
   display: grid;
-  grid-template-columns: 0.2fr 1fr 1fr 1fr 0.5fr;
+  grid-template-columns: 0.2fr 1fr 1fr 1fr 1fr 0.5fr;
   min-width: 600px;
   font-size: 1rem;
   user-select: none;
@@ -104,7 +104,7 @@ html,
 
 .student-table-row {
   display: grid;
-  grid-template-columns: 0.2fr 1fr 1fr 1fr 0.5fr;
+  grid-template-columns: 0.2fr 1fr 1fr 1fr 1fr 0.5fr;
   min-width: 600px;
   font-size: 1rem;
   user-select: none;

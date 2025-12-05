@@ -7,7 +7,8 @@ import Student from "./Student";
 import Route from "./Route";
 import Schedule from "./Schedule";
 import Incident from "./Incident";
-
+import Message from "./Message";
+import MapShowPoint from "./MapShowPoint";
 import Exam from "./zexam";
 
 const Sidebar = ({ navigation }) => {
@@ -115,8 +116,8 @@ const Sidebar = ({ navigation }) => {
             id="8"
             className={activeMenu == 7 ? "active" : ""}
             onClick={() => {
-              navigation(1);
-              setActiveMenu(1);
+              navigation(8);
+              setActiveMenu(8);
             }}
           >
             <span role="img" aria-label="message">
@@ -171,7 +172,7 @@ const Display = () => {
       content = <Incident />;
       break;
     case 8:
-      content = <Tongquan />;
+      content = <MapShowPoint />;
       break;
     default:
       content = <Tongquan />;
