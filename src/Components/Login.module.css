@@ -1,0 +1,137 @@
+/* src/components/LoginScreen.module.css */
+
+/* CONTAINER CHUNG */
+.container {
+    width: 320px; 
+    background-color: #007bff; /* Màu xanh dương */
+    border-radius: 20px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    min-height: 100vh;
+    color: white;
+}
+
+/* HEADER VÀ TIÊU ĐỀ */
+.header {
+    text-align: center;
+    width: 100%;
+}
+
+.logo {
+    width: 80px; 
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.trackingText {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.welcomeTitle {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 10px 0 30px 0;
+}
+
+/* THÔNG BÁO LỖI */
+.errorMessage {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #dc3545; /* Màu đỏ */
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* FORM INPUT */
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputField {
+    width: 85%;
+    padding: 10px 0;
+    margin-bottom: 30px;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid white; 
+    transition: border-bottom-color 0.2s;
+}
+
+.inputField::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.inputField:focus {
+    outline: none;
+    border-bottom-color: yellow; 
+}
+
+
+/* NÚT ĐĂNG NHẬP */
+.loginButton {
+    width: 90%;
+    padding: 15px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 50px;
+    background-color: white;
+    color: #007bff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.loginButton:hover {
+    background-color: #f0f0f0;
+}
+
+/* STYLE KHI LOADING */
+.loading {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #333;
+}
+
+
+/* LIÊN KẾT VÀ FOOTER */
+.linkSection {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+
+.actionLink {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 5px 0;
+    opacity: 0.9;
+}
+
+.actionLink:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    color: white;
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: auto;
+}

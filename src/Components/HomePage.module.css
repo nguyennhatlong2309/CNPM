@@ -1,0 +1,503 @@
+/* src/components/HomePage.module.css */
+/* ...existing code... */
+html, body, #root {
+  height: 50%;
+  margin: 0;
+  overflow: hidden; /* keep page fixed; internal areas can scroll */
+  box-sizing: border-box;
+  
+}
+h1,h2,h3,h4,h5,h6,p,ul,ol { margin: 0; padding: 0; }
+
+/* KHUNG CHUNG (Mô phỏng thiết bị di động) */
+.mobileFrame {
+    width: 375px; /* Chiều rộng di động chuẩn */
+    height: 100vh; /* Chiều cao di động chuẩn */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f8f8;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: #e0e0e0; /* Màu nền header theo ảnh */
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    flex: 0 0 auto; /* không co giãn, nằm trên cùng */
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+}
+
+.logoIcon {
+    color: #f7a800; /* Màu vàng của biểu tượng School Bus */
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.settingsIcon {
+    font-size: 24px;
+    color: #555;
+    cursor: pointer;
+}
+
+/* nút settings (trong header) */
+.settingsBtn {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  margin-right: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* overlay mờ khi drawer mở */
+.drawerOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background 240ms ease;
+  z-index: 28;
+}
+.drawerOverlay.show {
+  background: rgba(0,0,0,0.25);
+  pointer-events: auto;
+}
+
+/* drawer chính: trượt từ phải, căn trong mobileFrame */
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 56px; /* tránh chồng footer */
+  width: min(300px, 85%);
+  max-width: 320px;
+  background: #fff;
+  box-shadow: -8px 0 24px rgba(0,0,0,0.12);
+  transform: translateX(110%); /* ẩn ngoài phải */
+  transition: transform 320ms cubic-bezier(.22,.9,.26,1);
+  z-index: 30;
+  box-sizing: border-box;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 1px solid rgba(0,0,0,0.04);
+}
+
+/* khi mở: translate về 0 */
+.drawer.open {
+  transform: translateX(0);
+}
+
+/* header trong drawer */
+.drawerHeader {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 6px 4px;
+  border-bottom: 1px solid #eee;
+}
+.drawerClose {
+  background:transparent;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* nội dung drawer */
+.drawerContent {
+  padding: 8px 4px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex:1 1 auto;
+}
+
+/* thông tin phụ huynh */
+.parentInfo {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:8px 4px;
+}
+.parentAvatar {
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#e6e6e6,#cfcfcf);
+  flex:0 0 56px;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+.parentName {
+  font-weight:700;
+  font-size:16px;
+}
+.parentPhone, .parentEmail {
+  font-size:13px;
+  color:#666;
+}
+
+/* nút đăng xuất */
+.logoutBtn {
+  margin-top: 12px;
+  width:100%;
+  padding:10px 12px;
+  background:#e53935;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+/* đảm bảo vị trí tương tác không bị che bởi driver card */
+.driverCardWrap { z-index: 29; } /* driver card dưới drawer */
+
+/* KHU VỰC CHÍNH */
+.mainContent {
+    flex-grow: 1;
+    position: relative; /* Quan trọng để Map và Card xếp chồng lên nhau */
+    flex: 1 1 auto;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Thiết lập chiều cao cố định cho map và tripList có scroll riêng */
+:root {
+  --trip-item-height: 72px; /* điều chỉnh nếu cần để vừa 3 hàng */
+}
+
+
+/* KHU VỰC BẢN ĐỒ */
+.mapArea {
+    flex: 0 0 320px;
+    width: 100%;
+    height: 320px; /* Chiếm toàn bộ không gian còn lại */
+    background-color: #ddd; /* Màu nền giả lập map */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.mapPlaceholder {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Danh sách chuyến: cho phép cuộn bên trong mainContent nếu dài */
+.tripList {
+  flex: 1 1 auto;
+  height: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+/* Các item chuyến */
+.tripItem {
+  padding: 12px 0;
+  height: var(--trip-item-height);
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+/* Tùy chỉnh thanh cuộn (Chromium) */
+.tripList::-webkit-scrollbar {
+  width: 10px;
+}
+.tripList::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.12);
+  border-radius: 6px;
+}
+.tripList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* FOOTER NAVIGATION */
+.footerNav {
+    flex: 0 0 56px;
+    align-items:center;
+    display: flex;
+    justify-content: space-around;
+    background-color: #e0e0e0; /* Màu nền footer theo ảnh */
+    border-top: 1px solid #ccc;
+}
+
+.navItem {
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+/* ...existing code... */
+
+/* Footer nav buttons: no square, circular touch target */
+.navItemBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* hover state: subtle blue tint + icon color */
+.navItemBtn:hover {
+  background: rgba(11,98,214,0.06);
+}
+.navItemBtn:hover svg {
+  color: #0b62d6;
+}
+
+/* active state when selected: stronger tint + icon color */
+.navActive {
+  background: rgba(11,98,214,0.12);
+}
+.navActive svg {
+  color: #0b62d6;
+}
+
+/* ensure default icon color */
+.icon, .activeIcon {
+  color: #888;
+  font-size: 20px;
+}
+
+/* remove any residual border so active is clean */
+.navItem, .navItemBtn {
+  border: none;
+  background: transparent;
+}
+
+/* ...existing code... */
+
+/* icon sizing inside buttons */
+.navItemBtn .activeIcon,
+.navItemBtn .icon {
+  font-size: 36px;
+}
+
+.icon {
+    font-size: 24px;
+    color: #777;
+}
+
+.activeIcon {
+    font-size: 24px;
+}
+
+.driverCardWrap{
+  position: absolute;
+  left: 50%;
+  bottom: 56px;            /* giảm khoảng cách tới thanh home */
+  width: min(360px, calc(100% - 40px)); /* cố định max-width và margin ngang */
+  max-width: 360px;
+  transform: translate(-50%, 120%); /* ban đầu nằm dưới khung */
+  transition: transform 320ms cubic-bezier(.22,.9,.26,1);
+  z-index: 30;
+  pointer-events: none; /* mặc định không nhận sự kiện khi ẩn */
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* khi show -> trượt lên và nhận sự kiện */
+.driverCardWrap.show {
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+/* khi có class show -> trượt lên */
+.show {
+  transform: translateY(0);
+}
+
+/* Thẻ card chính */
+.driverCard {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  border: 4px solid #1677ff;
+  padding: 16px;
+  box-sizing: border-box;
+  pointer-events: auto;
+  position: relative; /* để đóng button absolute bên trong */
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#e6e6e6,#cfcfcf);
+  flex: 0 0 74px;
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+.driverMeta {
+  display: flex;
+  flex-direction: column;
+}
+
+.driverName {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111;
+}
+
+.plate {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.etaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.etaTime {
+  display: flex;
+  flex-direction: column;
+}
+
+.etaLabel {
+  font-size: 12px;
+  color: #777;
+}
+
+.etaValue {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
+.etaSub {
+  font-size: 12px;
+  color: #555;
+}
+
+.etaStatus {
+  font-size: 13px;
+  color: #999;
+}
+
+.cardActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.actionBtn {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.actionIcon {
+  font-size: 22px;
+  color: #4a3cff; /* màu icon giống ảnh (tím/xanh) */
+}
+
+.actionText {
+  font-size: 13px;
+  color: #333;
+}
+
+/* active state for footer nav (circle background + icon color) */
+.navActive {
+  background: rgba(11,98,214,0.12);
+}
+.navActive :global(.icon), /* ensure icon color when using css modules */
+.navActive .icon,
+.navActive .activeIcon {
+  color: #0b62d6;
+}
+
+/* remove any residual border so active is clean */
+.navItemBtn {
+  border: none;
+  background: transparent;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index: 999;
+}
+.modal {
+  background:#fff;
+  padding:16px;
+  border-radius:8px;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* điều chỉnh để nội dung map không bị che khuất quá nhiều trên các màn lớn */
+@media (min-width: 1000px) {
+  .driverCard {
+    width: 360px;
+  }
+}

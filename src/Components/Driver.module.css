@@ -1,0 +1,109 @@
+/* src/components/DriverInfoCard.module.css */
+
+.cardContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 10px 30px; 
+    background-color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+.dragHandle {
+    width: 40px;
+    height: 4px;
+    background-color: #ccc;
+    margin: 0 auto 10px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+/* PHẦN TÀI XẾ */
+.driverSection {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 20px;
+    background-color: #e0e0e0; /* Màu nền cho placeholder */
+    border: 3px solid #007bff;
+}
+
+.driverDetails {
+    flex-grow: 1;
+}
+
+.driverName {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.carPlate {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+}
+
+/* PHẦN DỰ KIẾN ĐẾN (ETA) */
+.etaSection {
+    background-color: #e7f5ff; /* Màu nền xanh nhạt */
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border-left: 5px solid #007bff;
+}
+
+.etaTime {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    color: #007bff;
+}
+
+.etaStatus {
+    font-size: 14px;
+    color: #333;
+    margin: 5px 0 0 0;
+}
+
+/* NÚT HÀNH ĐỘNG */
+.actionButtons {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.actionItem {
+    cursor: pointer;
+    width: 30%;
+}
+
+.actionItem svg {
+    font-size: 32px;
+    padding: 10px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    background-color: #e7f5ff; /* Nền icon */
+}
+
+.actionLabel {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    color: #333;
+}
+
+.callIcon { color: #28a745; } /* Màu xanh lá cho Gọi */
+.shareIcon { color: #17a2b8; } /* Màu xanh ngọc cho Chia sẻ */
+.lateIcon { color: #ffc107; } /* Màu vàng/cam cho Báo trễ */

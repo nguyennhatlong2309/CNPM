@@ -1,0 +1,10 @@
+/* src/index.css */
+
+/* Đảm bảo Component được căn giữa */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
