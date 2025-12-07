@@ -1,16 +1,31 @@
 const db = require("../config/db");
 const SY = require("../models/schoolyear.model");
 
+const formatDate = (date) => {
+  if (!date) return null;
+  return date.toISOString().split("T")[0]; // YYYY-MM-DD
+};
+
 exports.getAll = async () => {
   const [rows] = await db.query(`SELECT * FROM ${SY.table}`);
-  return rows;
+  // format các cột DATE
+  return rows.map((r) => ({
+    ...r,
+    start_date: formatDate(r.start_date),
+    end_date: formatDate(r.end_date),
+  }));
 };
 
 exports.getById = async (id) => {
   const [rows] = await db.query(`SELECT * FROM ${SY.table} WHERE year_id = ?`, [
     id,
   ]);
-  return rows[0];
+  if (!rows[0]) return null;
+  return {
+    ...rows[0],
+    start_date: formatDate(rows[0].start_date),
+    end_date: formatDate(rows[0].end_date),
+  };
 };
 
 exports.create = async (data) => {

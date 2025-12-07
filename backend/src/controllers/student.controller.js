@@ -7,6 +7,13 @@ exports.getAll = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
+exports.getAllFL = async (req, res) => {
+  try {
+    res.json(await Service.getAllFL());
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
 
 exports.getById = async (req, res) => {
   try {

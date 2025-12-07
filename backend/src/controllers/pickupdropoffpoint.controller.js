@@ -24,10 +24,47 @@ exports.create = async (req, res) => {
   }
 };
 
+exports.createMultiple = async (req, res) => {
+  try {
+    const firstId = await Service.createMultiple(req.body); // body là mảng points
+    res.json({ message: "Inserted successfully", firstId });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
 exports.update = async (req, res) => {
   try {
     await Service.update(req.params.id, req.body);
     res.json({ message: "updated" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+exports.updateMultiple = async (req, res) => {
+  try {
+    await Service.updateMultiple(req.body);
+    res.json({ message: "updated multiple" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+exports.deletePoint = async (req, res) => {
+  try {
+    await Service.deletePoint(req.params.id);
+    res.json({ message: "soft deleted" });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+exports.deleteMultiple = async (req, res) => {
+  try {
+    console.log(req.body);
+    const count = await Service.deleteMultiple(req.body);
+    res.json({ message: `${count} points soft deleted` });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

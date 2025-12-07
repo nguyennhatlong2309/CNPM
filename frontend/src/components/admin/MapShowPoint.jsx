@@ -1,13 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import "./MapShowPoint.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibG9uZ25oYXQyMzkiLCJhIjoiY21pMmc0MGk1MWtndjJqb3FlYmZ4dDFucSJ9.50MnkL8QdWHEcT3inc6tqw";
 
-const MapComponent = () => {
+const MapComponent = ({ onSavePoints, initialPoints = [], setETDT }) => {
   const mapContainer = useRef(null);
   const geocoderContainer = useRef(null);
   const map = useRef(null);
@@ -27,7 +26,10 @@ const MapComponent = () => {
       console.error("Không tìm được route hợp lệ từ API");
       return null;
     }
-
+    setETDT({
+      distance_km: data.routes[0].distance_km,
+      estimated_time: data.routes[0].distance_km / 1000 / 22,
+    });
     return data.routes[0].geometry.coordinates;
   };
 
@@ -76,7 +78,7 @@ const MapComponent = () => {
 
   // ---------------------- ADD MARKER ----------------------
   const addMarker = (markerData) => {
-    const { id, lngLat } = markerData;
+    const { id, lngLat, name } = markerData;
 
     const pointMarker = new mapboxgl.Marker({ color: "#00e0ff" })
       .setLngLat(lngLat)
@@ -97,7 +99,6 @@ const MapComponent = () => {
       .setLngLat(lngLat)
       .addTo(map.current);
 
-    // Right click delete
     el.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       const removeId = Number(e.target.dataset.id);
@@ -125,6 +126,13 @@ const MapComponent = () => {
     return { ...markerData, pointMarker, textMarker, numberEl: el };
   };
 
+  // ---------------------- UPDATE NAME ----------------------
+  const updateName = (index, newName) => {
+    setMarkers((prev) =>
+      prev.map((m, i) => (i === index ? { ...m, name: newName } : m))
+    );
+  };
+
   // ---------------------- MAP INIT ----------------------
   useEffect(() => {
     if (map.current) return;
@@ -132,11 +140,10 @@ const MapComponent = () => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [105.8342, 21.0278],
-      zoom: 10,
+      center: [106.6822585846524, 10.759912245499992],
+      zoom: 13,
     });
 
-    // geocoder
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl,
@@ -154,12 +161,13 @@ const MapComponent = () => {
       });
     });
 
-    // CLICK MAP -> add marker
     map.current.on("click", (e) => {
       const lngLat = e.lngLat;
 
       setMarkers((prev) => {
-        const newMarker = addMarker({ id: prev.length + 1, lngLat });
+        const newId = prev.length + 1;
+        const newName = "điểm " + newId;
+        const newMarker = addMarker({ id: newId, lngLat, name: newName });
 
         const updated = [...prev, newMarker];
         drawRoute(updated);
@@ -169,16 +177,47 @@ const MapComponent = () => {
     });
   }, []);
 
+  // ---------------------- LOAD INITIAL POINTS ----------------------
+  useEffect(() => {
+    if (!Array.isArray(initialPoints)) {
+      console.error("initialPoints phải là mảng!");
+      return;
+    }
+    if (initialPoints.length > 0 && map.current) {
+      // Xóa markers cũ
+      markers.forEach((m) => {
+        m.pointMarker.remove();
+        m.textMarker.remove();
+      });
+      setMarkers([]);
+
+      // Thêm markers từ initialPoints
+      const newMarkers = initialPoints.map((point, index) => {
+        const lngLat = {
+          lng: parseFloat(point.longitude),
+          lat: parseFloat(point.latitude),
+        };
+        return addMarker({ id: index + 1, lngLat, name: point.point_name });
+      });
+      setMarkers(newMarkers);
+
+      // Vẽ route nếu có >=2 điểm
+      if (newMarkers.length >= 2) {
+        drawRoute(newMarkers);
+      }
+    }
+  }, [initialPoints]);
+
   // ---------------------- MOVE UP ----------------------
   const moveUp = (index) => {
     if (index === 0) return;
 
     const newMarkers = [...markers];
+    // SWAP
     const temp = newMarkers[index];
     newMarkers[index] = newMarkers[index - 1];
     newMarkers[index - 1] = temp;
 
-    // cập nhật thứ tự
     newMarkers.forEach((m, i) => {
       m.id = i + 1;
       if (m.numberEl) {
@@ -191,70 +230,66 @@ const MapComponent = () => {
     drawRoute(newMarkers);
   };
 
-  // ---------------------- DRAG END ----------------------
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-
-    const newMarkers = Array.from(markers);
-    const [removed] = newMarkers.splice(result.source.index, 1);
-    newMarkers.splice(result.destination.index, 0, removed);
-
-    newMarkers.forEach((m, i) => {
-      m.id = i + 1;
-      if (m.numberEl) {
-        m.numberEl.innerText = m.id;
-        m.numberEl.dataset.id = m.id;
-      }
-    });
-
-    setMarkers(newMarkers);
-    drawRoute(newMarkers);
+  // ---------------------- SAVE LIST ----------------------
+  const saveList = () => {
+    const list = markers.map((m) => ({
+      point_name: m.name,
+      longitude: m.lngLat.lng.toFixed(8),
+      latitude: m.lngLat.lat.toFixed(8),
+    }));
+    if (onSavePoints) {
+      onSavePoints(list); // Truyền dữ liệu về component cha
+    }
   };
 
   // ---------------------- RENDER ----------------------
   return (
-    <div className="map-container">
+    <div className="MSP-map-container">
       <div className="MSP-sidebar">
-        <div ref={geocoderContainer} className="geocoder-container" />
+        <div ref={geocoderContainer} className="MSP-geocoder-container" />
 
-        <h3>Danh sách điểm</h3>
+        <div className="MSP-sidebar-middle">
+          <h3>Danh sách điểm</h3>
 
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="markers">
-            {(provided) => (
-              <ul {...provided.droppableProps} ref={provided.innerRef}>
-                {markers.map((m, index) => (
-                  <Draggable
-                    key={m.id}
-                    draggableId={m.id.toString()}
-                    index={index}
+          <ul>
+            {markers.map((m, index) => (
+              <li key={m.id} className="MSP-marker-item">
+                <div className="MSP-marker-content">
+                  <div>
+                    <strong>{index + 1}.</strong>
+                    <input
+                      type="text"
+                      value={m.name}
+                      onChange={(e) => updateName(index, e.target.value)}
+                      className="MSP-marker-name-input"
+                    />
+                  </div>
+
+                  <span>
+                    Lng: {m.lngLat.lng.toFixed(8)}, Lat:{" "}
+                    {m.lngLat.lat.toFixed(8)}
+                  </span>
+                  <button
+                    onClick={() => {
+                      moveUp(index);
+                    }}
                   >
-                    {(prov) => (
-                      <li
-                        ref={prov.innerRef}
-                        {...prov.draggableProps}
-                        {...prov.dragHandleProps}
-                        className="marker-item"
-                      >
-                        <strong>{index + 1}.</strong> Lng:{" "}
-                        {m.lngLat.lng.toFixed(4)}, Lat:{" "}
-                        {m.lngLat.lat.toFixed(4)}
-                        <div>
-                          <button onClick={() => moveUp(index)}>MoveUp</button>
-                        </div>
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
+                    MoveUp
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-                {provided.placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <div>
+          <button onClick={saveList} className="MSP-save-button">
+            Lưu
+          </button>
+        </div>
       </div>
 
-      <div ref={mapContainer} className="map" />
+      <div ref={mapContainer} className="MSP-map" />
     </div>
   );
 };

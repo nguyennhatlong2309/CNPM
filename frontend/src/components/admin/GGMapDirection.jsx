@@ -22,7 +22,7 @@ async function getRoute({ map, places }) {
 
   const route = json.routes[0].geometry.coordinates;
 
-  // XÓA LAYER CŨ (tránh lỗi addLayer trùng id)
+  // XÓA LAYER CŨ
   if (map.getLayer("route-line")) map.removeLayer("route-line");
   if (map.getSource("route-line")) map.removeSource("route-line");
 
@@ -46,11 +46,17 @@ async function getRoute({ map, places }) {
   });
 }
 
-export default function MapboxDirection({ list_points, selectedPoint }) {
+export default function MapboxDirection({
+  list_points,
+  selectedPoint,
+  selectedRouteID,
+}) {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
-  // Tâm bản đồ
+  // Lưu marker để dễ xóa
+  const markersRef = useRef([]);
+
   const lngLatCenter = [
     selectedPoint?.longitude ?? 106.6708,
     selectedPoint?.latitude ?? 10.7676,
@@ -71,19 +77,27 @@ export default function MapboxDirection({ list_points, selectedPoint }) {
     const map = mapRef.current;
     if (!map) return;
 
-    const oldMarkers = document.getElementsByClassName("custom-marker");
-    while (oldMarkers.length > 0) oldMarkers[0].remove();
+    // Xóa tất cả marker cũ
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
 
+    // Xóa route cũ
+    if (map.getLayer("route-line")) map.removeLayer("route-line");
+    if (map.getSource("route-line")) map.removeSource("route-line");
+
+    // Thêm marker mới
     list_points.forEach((p) => {
-      const isSelected =
-        selectedPoint && p.orderInRoute === selectedPoint.orderInRoute;
+      const isSelected = selectedPoint && p.point_id === selectedPoint.point_id;
 
-      new mapboxgl.Marker({
+      // Marker màu
+      const markerColor = new mapboxgl.Marker({
         color: isSelected ? "red" : "#9AFFFC",
       })
         .setLngLat([p.longitude, p.latitude])
         .addTo(map);
+      markersRef.current.push(markerColor);
 
+      // Marker số thứ tự
       const el = document.createElement("div");
       el.className = "custom-marker";
       el.style.background = "white";
@@ -92,11 +106,12 @@ export default function MapboxDirection({ list_points, selectedPoint }) {
       el.style.fontSize = "12px";
       el.style.fontWeight = "bold";
       el.style.boxShadow = "0 0 3px rgba(0,0,0,0.3)";
-      el.innerText = p.orderInRoute;
+      el.innerText = p.order_in_route;
 
-      new mapboxgl.Marker({ element: el, anchor: "top" })
+      const markerNumber = new mapboxgl.Marker({ element: el, anchor: "top" })
         .setLngLat([p.longitude, p.latitude])
         .addTo(map);
+      markersRef.current.push(markerNumber);
     });
 
     // Route
@@ -112,7 +127,7 @@ export default function MapboxDirection({ list_points, selectedPoint }) {
         speed: 1.5,
       });
     }
-  }, [list_points, selectedPoint]);
+  }, [list_points, selectedPoint, selectedRouteID]);
 
   return (
     <div

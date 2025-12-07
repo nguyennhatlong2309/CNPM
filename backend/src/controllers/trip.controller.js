@@ -8,9 +8,33 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getMaxMinDate = async (req, res) => {
+  try {
+    res.json(await Service.getMaxMinDate());
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
 exports.getById = async (req, res) => {
   try {
     res.json(await Service.getById(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+exports.getByTimeRange = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ error: "startDate và endDate là bắt buộc" });
+    }
+
+    const trips = await Service.getByTimeRange(startDate, endDate);
+    res.json(trips);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

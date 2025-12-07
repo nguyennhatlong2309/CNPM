@@ -73,17 +73,19 @@ body {
   flex-direction: column;
   border: solid 1px rgb(0, 0, 0, 0.1);
 }
+
 .schedule-table-header {
   display: grid;
   grid-template-columns: 0.5fr repeat(7, 1fr);
   font-weight: 600;
   background-color: #f3f6ff;
   border-left: none;
-  border-bottom: solid 2px#abb615;
+  border-bottom: solid 2px #abb615;
   padding: 0;
   margin-right: 15px;
   max-height: auto;
 }
+
 .schedule-table-header div {
   text-align: center;
   align-items: center;
@@ -131,23 +133,140 @@ body {
   border-left: none;
 }
 
-/* Ô cuối cùng nổi bật */
 .schedule-table-cell {
-  display: flex;
+  display: flex; /* xếp div con từ trên xuống */
   flex-direction: column;
-  padding: 0;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 2px;
+  gap: 5px; /* khoảng cách giữa các div con */
+  box-sizing: border-box;
 }
 
 .schedule-table-cell > div {
-  border: solid 1px rgb(0, 0, 0, 0.1);
-  height: 80%;
+  border: 1px solid black;
   border-radius: 5px;
-  background-color: #eee;
-  padding: 0;
-  margin-top: 10px;
-  padding: 5px 2px;
+  padding: 2px 5px;
+  height: 35px;
+  box-sizing: border-box;
+  text-align: left;
+  margin: 0; /* loại bỏ margin-top */
 }
 
 .empty {
   background-color: rgb(255, 0, 0, 0.2);
+}
+
+/* Dropdown menu */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #c1c7d0;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 200px;
+  padding: 5px 0;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Popup Modal */
+.popup-overlay {
+  position: fixed; /* fix thay vì absolute */
+  top: 0;
+  left: 0;
+  width: 100vw; /* full viewport width */
+  height: 100vh; /* full viewport height */
+  background-color: rgba(0, 0, 0, 0.3); /* thêm overlay mờ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 400px;
+  max-width: 90%;
+  position: relative; /* giữ relative, không cần top/left/transform nữa */
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.popup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.popup-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.popup-form input,
+.popup-form select {
+  padding: 8px;
+  border: 1px solid #c1c7d0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background-color: #ccc;
+}
+
+.cancel-btn:hover {
+  background-color: #aaa;
+}
+
+/* Popup Edit Layout */
+.popup-edit-layout {
+  display: flex;
+  gap: 20px;
+}
+
+.popup-column {
+  flex: 1;
+}
+
+.popup-column h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.popup-column p {
+  margin: 5px 0;
+  font-size: 14px;
 }

@@ -172,7 +172,7 @@ const Display = () => {
       content = <Incident />;
       break;
     case 8:
-      content = <MapShowPoint />;
+      content = <Message />;
       break;
     default:
       content = <Tongquan />;

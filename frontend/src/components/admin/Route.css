@@ -152,6 +152,7 @@ html,
 /* Khung bản đồ */
 .route-map-container {
   height: 100%;
+  max-height: 100%;
   background: white;
   border-radius: 10px 10px 0px 0px;
   position: relative;
@@ -191,4 +192,71 @@ html,
   font-weight: 600;
   font-size: 1.1rem;
   color: #222;
+}
+
+/* Modal styles (CSS thuần) */
+.route-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.route-modal-content {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90vw;
+  height: 95vh;
+  max-height: 95vh;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.route-modal-body {
+  margin-bottom: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.route-modal-body label {
+  display: flex;
+  align-items: center;
+}
+
+.route-modal-body select,
+.route-modal-body input {
+  width: 300px;
+  padding: 8px;
+  margin-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.map-in-modal {
+  flex: 1;
+  margin-top: 10px;
+  overflow: auto;
+}
+
+.route-name-status {
+  display: flex;
+  align-items: center; /* giúp input & select nằm cùng 1 hàng */
+  gap: 10px; /* khoảng cách giữa các label */
+}
+
+.route-error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
 }

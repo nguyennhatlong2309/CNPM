@@ -6,6 +6,16 @@ exports.getAll = async () => {
   return rows;
 };
 
+exports.getAllFL = async () => {
+  const [rows] =
+    await db.query(`select s.*,p.parent_id,p.parent_name,u.phone,pi.point_name,r.route_id,r.route_name from student s 
+left join parent p on p.parent_id = s.parent_id
+left join user u on u.user_id = p.user_id
+left join pickupdropoffpoint pi on pi.point_id = s.pickup_point_id 
+left join route r on r.route_id = pi.route_id`);
+  return rows;
+};
+
 exports.getById = async (id) => {
   const [rows] = await db.query(
     `SELECT * FROM ${Student.table} WHERE student_id = ?`,

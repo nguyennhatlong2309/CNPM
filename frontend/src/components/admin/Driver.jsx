@@ -64,6 +64,7 @@ function DriverManagement() {
     status: "",
     bus_id: "",
   });
+  const [errors, setErrors] = useState({}); // Thêm state để theo dõi lỗi
 
   const selectedDriver = driversData.find(
     (driver) => driver.driver_id === selectedDriverId
@@ -94,6 +95,7 @@ function DriverManagement() {
       status: "Hoạt động",
       bus_id: "",
     });
+    setErrors({}); // Reset lỗi khi mở popup thêm
     setIsPopupOpen(true);
   };
 
@@ -107,6 +109,7 @@ function DriverManagement() {
       status: driver.status || "",
       bus_id: driver.bus_id || "",
     });
+    setErrors({}); // Reset lỗi khi mở popup sửa
     setIsPopupOpen(true);
   };
 
@@ -127,10 +130,34 @@ function DriverManagement() {
 
   // Xử lý lưu form
   const handleSave = async () => {
+    const newErrors = {};
+    const driver_name = formData.driver_name.trim();
+    if (!driver_name) {
+      newErrors.driver_name = "Họ tên không được để trống!";
+    }
+
+    const phone = formData.phone.trim();
+    const phoneRegex = /^[0-9]+$/;
+    if (!phone) {
+      newErrors.phone = "Số điện thoại không được để trống!";
+    } else if (!phoneRegex.test(phone)) {
+      newErrors.phone = "Số điện thoại chỉ được chứa số!";
+    } else if (phone.length < 10 || phone.length > 11) {
+      newErrors.phone = "Số điện thoại phải có 10-11 ký tự!";
+    }
+
+    // Loại bỏ kiểm tra bus_id vì có thể chọn None
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+
     // Chuẩn bị DTO gửi lên backend
     const driverDTO = {
-      driver_name: formData.driver_name,
-      phone: formData.phone,
+      driver_name: driver_name,
+      phone: phone,
       status: formData.status == "Hoạt động" ? "1" : "0",
       bus_id: formData.bus_id ? Number(formData.bus_id) : null,
     };
@@ -163,6 +190,9 @@ function DriverManagement() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: undefined });
+    }
   };
 
   return (
@@ -294,9 +324,13 @@ function DriverManagement() {
                   type="text"
                   name="driver_name"
                   value={formData.driver_name}
+                  className={errors.driver_name ? "error" : ""}
                   onChange={handleInputChange}
                   required
                 />
+                {errors.driver_name && (
+                  <div className="error-text">{errors.driver_name}</div>
+                )}
               </div>
               <div className="driver-form-group">
                 <label>Số điện thoại:</label>
@@ -304,9 +338,13 @@ function DriverManagement() {
                   type="text"
                   name="phone"
                   value={formData.phone}
+                  className={errors.phone ? "error" : ""}
                   onChange={handleInputChange}
                   required
                 />
+                {errors.phone && (
+                  <div className="error-text">{errors.phone}</div>
+                )}
               </div>
               <div className="driver-form-group">
                 <label>Trạng thái:</label>
@@ -321,18 +359,13 @@ function DriverManagement() {
                 </select>
               </div>
               <div className="driver-form-group">
-                <label>Xe Bus:</label>
+                <label>Xe Bus: (không bắt buộc)</label>
                 <select
                   name="bus_id"
                   value={formData.bus_id}
                   onChange={handleInputChange}
-                  required
                 >
-                  <option value="" disabled>
-                    -- Chọn xe bus --
-                  </option>
                   <option value="">None</option>
-
                   {buses.map((bus) => (
                     <option key={bus.bus_id} value={bus.bus_id}>
                       {bus.plate_number}

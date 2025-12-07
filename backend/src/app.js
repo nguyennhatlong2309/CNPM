@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors"); // thêm cors
 const app = express();
+const path = require("path");
 
 // Middleware
 app.use(
@@ -30,5 +31,6 @@ app.use("/api/schoolyear", require("./routes/schoolyear.route"));
 app.use("/api/student", require("./routes/student.route"));
 app.use("/api/trip", require("./routes/trip.route"));
 app.use("/api/user", require("./routes/user.route"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 module.exports = app;
