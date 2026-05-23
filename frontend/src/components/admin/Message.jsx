@@ -1,51 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Message.css";
 
 const App = () => {
-  // Dữ liệu mẫu cho người dùng
-  const users = [
-    { id: 1, name: "Alice", avatar: "https://via.placeholder.com/50" },
-    { id: 2, name: "Bob", avatar: "https://via.placeholder.com/50" },
-    { id: 3, name: "Charlie", avatar: "https://via.placeholder.com/50" },
-  ];
-
-  // Dữ liệu mẫu cho tin nhắn (theo userId)
-  const messagesData = {
-    1: [
-      { id: 1, text: "Hello Alice!", sender: "me" },
-      { id: 2, text: "Hi there!", sender: "Alice" },
-      { id: 3, text: "How are you?", sender: "me" },
-    ],
-    2: [
-      { id: 1, text: "Hey Bob!", sender: "me" },
-      { id: 2, text: "What's up?", sender: "Bob" },
-    ],
-    3: [
-      { id: 1, text: "Charlie, are you free?", sender: "me" },
-      { id: 2, text: "Yes, let's chat!", sender: "Charlie" },
-    ],
-  };
-
-  const [selectedUser, setSelectedUser] = useState(users[0]); // Người dùng mặc định
-  const [messages, setMessages] = useState(messagesData[selectedUser.id] || []);
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
-  // Hàm chọn người dùng
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/user")
+      .then((res) => {
+        const fetchedUsers = res.data.map((u) => ({
+          id: u.user_id,
+          name: u.name || "User " + u.user_id,
+          avatar: u.url_img || "https://via.placeholder.com/50",
+        }));
+        setUsers(fetchedUsers);
+        if (fetchedUsers.length > 0) {
+          selectUser(fetchedUsers[0]);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   const selectUser = (user) => {
     setSelectedUser(user);
-    setMessages(messagesData[user.id] || []);
+    axios
+      .get("http://localhost:5000/api/message")
+      .then((res) => {
+        const userMessages = res.data
+          .filter((m) => m.user_id === user.id || m.sender_id === user.id)
+          .map((m) => ({
+            id: m.mess_id,
+            text: m.content,
+            sender: m.sender_id === 1 ? "me" : user.name,
+          }));
+        setMessages(userMessages);
+      })
+      .catch((err) => console.error(err));
   };
 
-  // Hàm gửi tin nhắn
   const sendMessage = () => {
-    if (newMessage.trim()) {
-      const newMsg = {
-        id: messages.length + 1,
-        text: newMessage,
-        sender: "me",
+    if (newMessage.trim() && selectedUser) {
+      const payload = {
+        user_id: selectedUser.id,
+        sender_id: 1, // assuming admin is 1
+        content: newMessage,
+        sent_at: new Date().toISOString(),
+        is_read: 0,
       };
-      setMessages([...messages, newMsg]);
-      setNewMessage("");
+      axios
+        .post("http://localhost:5000/api/message", payload)
+        .then((res) => {
+          const newMsg = {
+            id: res.data.id || messages.length + 1,
+            text: newMessage,
+            sender: "me",
+          };
+          setMessages([...messages, newMsg]);
+          setNewMessage("");
+        })
+        .catch((err) => console.error(err));
     }
   };
 
@@ -57,7 +74,7 @@ const App = () => {
           {users.map((user) => (
             <li
               key={user.id}
-              className={selectedUser.id === user.id ? "active" : ""}
+              className={selectedUser?.id === user.id ? "active" : ""}
               onClick={() => selectUser(user)}
             >
               <img src={user.avatar} alt={user.name} />
@@ -66,9 +83,9 @@ const App = () => {
           ))}
         </ul>
       </div>
-      <div className="main">
+      <div className="chat-main">
         <div className="mess-content-header">
-          <h3>Chat with {selectedUser.name}</h3>
+          <h3>Chat with {selectedUser ? selectedUser.name : ""}</h3>
         </div>
         <div className="messages">
           {messages.map((msg) => (

@@ -1,28 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Tongquan.css";
 
-const data = {
-  soXeHoatDong: 35,
-  taiXeHienTai: 48,
-  hocSinhTrenXe: 200,
-  suCo: 3,
-  userName: "Nguyễn Văn A",
-  busInfo: {
-    tenTuyen: "Tuyến A - Bus#03",
-    taiXe: "Nguyễn Văn Tài",
-    hocSinh: "12/15 Học sinh",
-    viTri: "Nguyễn Văn Cừ, quận 5",
-    trangThai: "đón học sinh",
-  },
-  canhBao: [
-    { msg: "Bus#02 trên tuyến C - Kẹt xe", time: "08:10" },
-    { msg: "Bus#11 trên tuyến E - trễ 15 phút", time: "07:45" },
-    { msg: "Bus#15 trên tuyến D - Hư xe", time: "07:10" },
-  ],
-};
-
-const InfoCard = ({ icon, title, value, bgColor }) => (
-  <div className="info-card" style={{ backgroundColor: bgColor }}>
+const InfoCard = ({ icon, title, value }) => (
+  <div className="info-card">
     <div className="icon">{icon}</div>
     <div>
       <div className="card-title">{title}</div>
@@ -69,32 +50,52 @@ const Alerts = ({ alerts }) => (
 );
 
 const Dashboard = () => {
+  const [data, setData] = useState({
+    soXeHoatDong: 0,
+    taiXeHienTai: 0,
+    hocSinhTrenXe: 0,
+    suCo: 0,
+    canhBao: [],
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [busRes, driverRes, studentRes, incidentRes] = await Promise.all([
+          axios.get("http://localhost:5000/api/bus"),
+          axios.get("http://localhost:5000/api/drivers"),
+          axios.get("http://localhost:5000/api/student"),
+          axios.get("http://localhost:5000/api/incidents"),
+        ]);
+        
+        setData({
+          soXeHoatDong: busRes.data.length,
+          taiXeHienTai: driverRes.data.length,
+          hocSinhTrenXe: studentRes.data.length,
+          suCo: incidentRes.data.length,
+          canhBao: incidentRes.data.slice(0, 3).map(i => ({
+            msg: i.description,
+            time: i.incident_time ? new Date(i.incident_time).toLocaleTimeString() : "N/A",
+          }))
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="overview-content">
       <div className="overview-info-cards">
-        <InfoCard
-          icon="🚌"
-          title="Số xe hoạt động"
-          value={data.soXeHoatDong}
-          bgColor="#729dfc"
-        />
-        <InfoCard
-          icon="👨‍✈️"
-          title="Tài xế trực hôm nay"
-          value={data.taiXeHienTai}
-          bgColor="#8ef24f"
-        />
-        <InfoCard
-          icon="🎓"
-          title="Học sinh trên xe"
-          value={data.hocSinhTrenXe}
-          bgColor="#dbab0a"
-        />
-        <InfoCard icon="📋" title="Sự cố" value={data.suCo} bgColor="#f76d6d" />
+        <InfoCard icon="🚌" title="Số xe hoạt động" value={data.soXeHoatDong} />
+        <InfoCard icon="👨‍✈️" title="Tài xế trực hôm nay" value={data.taiXeHienTai} />
+        <InfoCard icon="🎓" title="Học sinh trên xe" value={data.hocSinhTrenXe} />
+        <InfoCard icon="📋" title="Sự cố" value={data.suCo} />
       </div>
 
       <div className="map-and-info">
-        <div className="map-container" style={{ border: "2px solid red" }}>
+        <div className="map-container">
           {/* Ở đây bạn có thể dùng thư viện bản đồ như Leaflet hoặc Google Maps */}
           <div className="map-placeholder">
             <iframe

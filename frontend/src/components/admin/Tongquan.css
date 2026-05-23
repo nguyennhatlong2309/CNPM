@@ -1,229 +1,224 @@
-/* Reset cơ bản và font chữ */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
+/* ============================================================
+   SSB - Tổng quan (Dashboard Overview)
+   Premium Dark Glassmorphism Cards
+   ============================================================ */
 
-body,
-html,
-#root1 {
-  height: 100vh;
-  background-color: #f2f8ff;
-  color: #222;
-  width: 100%;
-  overflow: hidden;
-}
-
-/* Container chính */
-.dashboard-container {
-  display: flex;
-  height: 100vh;
-}
-
-/* Sidebar bên trái */
-
-/* Phần nội dung chính */
 .overview-content {
-  flex: 1;
+  padding: var(--container-padding);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-}
-
-/* Header trên cùng */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-header h2 {
-  font-weight: 700;
-  font-size: 1.8rem;
-}
-
-/* Các ô thông tin */
-.overview-info-cards {
-  display: flex;
   gap: 20px;
-  margin-bottom: 30px;
 }
 
-/* Card thông tin */
-.overview-info-cards .info-card {
-  flex: 1;
-  background-color: #729dfc;
-  color: #222;
-  border-radius: 12px;
-  padding: 25px 20px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  box-shadow: 0 5px 10px rgb(114 157 252 / 0.3);
-  cursor: default;
-  transition: box-shadow 0.3s ease;
+/* ===== STAT CARDS ROW ===== */
+.overview-info-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--grid-gap);
 }
 
-.overview-info-cards .info-card:hover {
-  box-shadow: 0 8px 15px rgb(114 157 252 / 0.5);
-}
-
-.overview-info-cards .info-card .icon {
-  font-size: 2.3rem;
-  flex-shrink: 0;
-}
-
-.overview-info-cards .info-card .card-title {
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 5px;
-}
-
-.overview-info-cards .info-card .card-value {
-  font-weight: 700;
-  font-size: 2.2rem;
-  color: #222;
-}
-
-/* Màu background cho từng card */
-/* Số xe hoạt động */
-.overview-info-cards .info-card:nth-child(1) {
-  background-color: #729dfc;
-  color: #030f9f;
-  box-shadow: 1px 7px 9px rgba(114, 157, 252, 0.36);
-}
-
-/* Tài xế trực hôm nay */
-.overview-info-cards .info-card:nth-child(2) {
-  background-color: #8ef24f;
-  color: #626d1b;
-  box-shadow: 1px 7px 9px rgba(142, 242, 79, 0.36);
-}
-
-/* Học sinh trên xe */
-.overview-info-cards .info-card:nth-child(3) {
-  background-color: #ecbb07;
-  color: #403505;
-  box-shadow: 1px 7px 9px rgba(236, 187, 7, 0.5);
-}
-
-/* Sự cố */
-.overview-info-cards .info-card:nth-child(4) {
-  background-color: #f76d6d;
-  color: #6c1515;
-  box-shadow: 1px 7px 9px rgba(247, 109, 109, 0.52);
-}
-
-/* Khung bản đồ và phần bên cạnh */
-.map-and-info {
-  display: flex;
-  gap: 40px;
-  flex: 1;
-}
-
-/* Chỗ bản đồ */
-.map-container {
-  flex: 3;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
-  padding: 15px;
+.info-card {
   position: relative;
-  min-height: 400px;
-}
-
-/* Khung tooltip */
-.tooltip {
-  position: absolute;
-  top: 15px;
-  left: 20px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 7px rgb(0 0 0 / 0.12);
-  padding: 14px 16px;
-  max-width: 260px;
-  font-size: 0.9rem;
-  color: #333;
-  z-index: 10;
-}
-
-.tooltip strong {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-/* Phần bên phải */
-.side-info {
-  flex: 1.2;
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 8px;
+  overflow: hidden;
+  cursor: default;
+  transition: transform var(--transition), box-shadow var(--transition);
 }
 
-/* Chú thích và cảnh báo */
-.overview-legend,
-.alerts {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 25px 20px;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.09);
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--accent-primary));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
-/* Tiêu đề */
-.overview-legend h4,
-.alerts h4 {
-  font-weight: 700;
-  font-size: 1.25rem;
-  margin-bottom: 20px;
+.info-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* Nội dung chú thích */
-.overview-legend p {
-  font-size: 1rem;
-  margin-bottom: 15px;
+/* Card accent color overrides via inline style bg is removed - use data attrs */
+.info-card:nth-child(1) { --card-accent: #6366f1; }
+.info-card:nth-child(2) { --card-accent: var(--accent-secondary); }
+.info-card:nth-child(3) { --card-accent: var(--accent-warning); }
+.info-card:nth-child(4) { --card-accent: var(--accent-danger); }
+
+.info-card .icon {
+  font-size: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-/* Icon trong chú thích */
-.overview-legend .icon {
-  font-size: 1.25rem;
+  justify-content: center;
+  background: var(--bg-card-hover);
+  border: 1px solid var(--border-light);
   flex-shrink: 0;
+  margin-bottom: 4px;
 }
 
-/* Màu icon chú thích tương ứng */
-.overview-legend p:nth-child(2) .icon {
-  color: #4269e4; /* xe đang hoạt động */
-}
-
-.overview-legend p:nth-child(3) .icon {
-  color: #e13232; /* điểm đón */
-}
-
-.overview-legend p:nth-child(4) .icon {
-  color: #7a7a7a; /* sự cố */
-}
-
-/* Cảnh báo */
-.alerts .alert-item {
-  display: flex;
-  justify-content: space-between;
+.info-card .card-title {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
   font-weight: 500;
-  font-size: 1rem;
-  padding: 7px 0;
-  border-bottom: 1px solid #eee;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
 }
 
-.alerts .alert-item:last-child {
-  border-bottom: none;
+.info-card .card-value {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+/* ===== MAP AND INFO SECTION ===== */
+.map-and-info {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--grid-gap);
+}
+
+.map-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  min-height: 380px;
 }
 
 .map-placeholder {
-  height: 100%;
   width: 100%;
+  height: 100%;
+  min-height: 380px;
+}
+
+.map-placeholder iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  display: block;
+  border: none;
+  filter: hue-rotate(185deg) saturate(0.8) brightness(0.75);
+}
+
+/* ===== SIDE INFO ===== */
+.side-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+}
+
+/* ===== LEGEND PANEL ===== */
+.overview-legend {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.overview-legend h4 {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview-legend p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 6px 0;
+}
+
+.overview-legend p .icon {
+  font-size: 1rem;
+  width: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== ALERTS PANEL ===== */
+.alerts {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex: 1;
+}
+
+.alerts h4 {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-warning);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.alert-item > span:first-child {
+  color: var(--text-primary);
+  flex: 1;
+  line-height: 1.4;
+}
+
+.alert-item > span:last-child {
+  color: var(--text-tertiary);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.alerts .no-alerts {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 16px 0;
+  font-style: italic;
 }

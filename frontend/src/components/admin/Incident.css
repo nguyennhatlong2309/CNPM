@@ -1,228 +1,192 @@
-/* Reset / base styles */
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background-color: #f0f7ff;
-  color: #222;
-}
+/* ============================================================
+   SSB - Incident Management (Sự Cố)
+   Premium Dark Table + Detail Card
+   ============================================================ */
 
 .incident-content {
+  padding: var(--container-padding);
   display: flex;
   flex-direction: column;
-  flex: 1;
-  padding: 0 40px;
-  overflow-y: auto;
+  gap: 16px;
 }
 
-.incident-content-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 10px;
-}
-
-/* Main content */
-main {
-  flex: 1;
-  padding: 24px 48px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Header */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-.search-bar input {
-  width: 280px;
-  padding: 7px 14px;
-  border: 1.5px solid #ccc;
-  border-radius: 12px;
-  font-size: 14px;
-}
-
-/* Button */
-.btn {
-  padding: 10px 20px;
-  font-weight: 600;
-  font-size: 15px;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s ease;
-}
-
-.create-btn {
-  background-color: #3278ff;
-  margin-bottom: 18px;
-}
-
-.create-btn:hover {
-  background-color: #275dc2;
-}
-
-.edit-btn {
-  background-color: #3278ff;
-  padding: 12px 28px;
-}
-
-.edit-btn:hover {
-  background-color: #275dc2;
-}
-
-/* Table styles */
+/* ===== TABLE ===== */
 .incident-table {
-  display: flex;
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 10px;
-  font-size: 15px;
-  flex: 1;
-
-  flex-direction: column;
-  overflow-x: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
 .incident-table-header {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  background-color: #f3f6ff;
-  min-width: 600px;
-  font-size: 1rem;
-  user-select: none;
-  padding: 14px 18px;
-  background-color: white;
-  font-weight: 700;
-  border-bottom: 2px solid #4f93f7;
+  grid-template-columns: 55px 1fr 140px 1fr 100px;
+  padding: 0 20px;
+  height: 42px;
+  background: var(--bg-table-header);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
 }
 
 .incident-table-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+  max-height: 380px;
   overflow-y: auto;
 }
 
 .incident-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  min-width: 600px;
-  font-size: 1rem;
-  user-select: none;
-  margin: 5px 0px;
-  background-color: white;
-  border-bottom: 1px solid #f1f1f1;
+  grid-template-columns: 55px 1fr 140px 1fr 100px;
+  padding: 0 20px;
+  height: var(--row-height);
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-primary);
   cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
 }
 
-.incident-row.selected,
-.incident-row:hover {
-  background-color: #dbefff;
+.incident-row:last-child { border-bottom: none; }
+.incident-row:hover { background: var(--bg-row-hover); }
+.incident-row.selected {
+  background: var(--bg-row-selected) !important;
+  border-left-color: var(--accent-primary) !important;
 }
 
-.incident-table-header div,
-.incident-row div {
+/* Severity badges */
+.incident-severity {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.severity-high {
+  background: var(--accent-danger-muted);
+  color: var(--accent-danger);
+  border-color: var(--accent-danger-border);
+}
+
+.severity-medium {
+  background: var(--accent-warning-muted);
+  color: var(--accent-warning);
+  border-color: var(--accent-warning-border);
+}
+
+.severity-low {
+  background: var(--accent-info-muted);
+  color: var(--accent-info);
+  border-color: var(--accent-info-border);
+}
+
+.severity-resolved {
+  background: var(--accent-secondary-muted);
+  color: var(--accent-secondary);
+  border-color: var(--accent-secondary-border);
+}
+
+.incident-actions {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  gap: 4px;
 }
 
-/* Action buttons in row */
-.action-btn {
+.incident-btn-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius);
   border: none;
-  background: none;
-  font-size: 18px;
-  margin-left: 12px;
+  background: transparent;
   cursor: pointer;
-  transition: color 0.3s ease;
-  user-select: none;
-  color: #444;
-}
-
-.action-btn.edit:hover {
-  color: #3278ff;
-}
-
-.action-btn.delete:hover {
-  color: #ea3b3b;
-}
-
-/* Incident details section */
-.incident-details {
-  background-color: #fff;
-  margin-top: 24px;
-  padding: 20px 36px;
-  border-radius: 12px;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  font-size: 0.8rem;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  font-size: 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+}
+.incident-row:hover .incident-btn-icon,
+.incident-row.selected .incident-btn-icon { opacity: 1; }
+.incident-btn-icon:hover { background: var(--bg-input-hover); }
+
+/* ===== DETAIL PANEL ===== */
+.incident-detail {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: slideInUp 200ms ease;
 }
 
-.incident-details > div {
+.incident-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.incident-detail-header h3 {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.incident-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.incident-detail-item {
   display: flex;
   flex-direction: column;
+  gap: 3px;
 }
 
-.incident-details strong {
-  font-weight: 700;
+.incident-detail-label {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.incident-details button {
-  justify-self: end;
-  padding: 12px 28px;
-  border-radius: 8px;
+.incident-detail-value {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-/* Icons placeholders (optional) */
-/* You can replace these with SVG or icon fonts */
-.icon-home::before {
-  content: "🏠";
+/* Incident type indicator dot */
+.incident-row .incident-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.icon-bus::before {
-  content: "🚌";
-}
-
-.icon-driver::before {
-  content: "👨‍✈️";
-}
-
-.icon-student::before {
-  content: "🎓";
-}
-
-.icon-route::before {
-  content: "📍";
-}
-
-.icon-schedule::before {
-  content: "📅";
-}
-
-.icon-incident::before {
-  content: "📋";
-}
-
-.icon-message::before {
-  content: "💬";
-}
-
-.icon-bell::before {
-  content: "🔔";
+.incident-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
 }

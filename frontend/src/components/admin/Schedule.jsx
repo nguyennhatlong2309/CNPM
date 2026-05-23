@@ -106,15 +106,15 @@ function convertWeekToDay(week) {
 // ============================= COMPONENT =============================
 const CellTable = ({ listDriver, id, onEditTrip }) => {
   if (!listDriver || listDriver.length === 0)
-    return <div className="schedule-table-cell empty"></div>;
+    return <div className="empty-cell"></div>;
 
   return (
-    <div className="schedule-table-cell" id={id}>
+    <div id={id}>
       {listDriver.map((driver) => (
         <div
           key={`${driver.driver_id}_${driver.trip_id}`}
+          className="driver-chip"
           onClick={() => onEditTrip(driver)}
-          style={{ cursor: "pointer" }}
         >
           {driver.driver_name}
         </div>
@@ -260,9 +260,9 @@ const ScheduleManager = () => {
 
   return (
     <div className="schedule-content">
-      <div className="schedule-content-header">
+      <div className="schedule-controls">
         <select
-          className="schedule-input"
+          className="schedule-week-picker"
           value={selectedWeekID}
           onChange={(e) => setSelectedWeekID(e.target.value)}
         >
@@ -274,9 +274,9 @@ const ScheduleManager = () => {
           ))}
         </select>
 
-        <div className="dropdown-container">
+        <div className="schedule-dropdown">
           <button
-            className="schedule-btn schedule-edit-btn"
+            className="schedule-btn-edit"
             onClick={() => openPopup("edit")}
           >
             Chỉnh sửa
@@ -284,34 +284,34 @@ const ScheduleManager = () => {
         </div>
 
         <div
-          className="dropdown-container"
+          className="schedule-dropdown"
           onMouseEnter={() => setShowAddMenu(true)}
           onMouseLeave={() => setShowAddMenu(false)}
         >
-          <button className="schedule-btn schedule-create-btn">
+          <button className="schedule-btn-add">
             + Thêm mới
           </button>
           {showAddMenu && (
-            <div className="dropdown-menu">
-              <div className="dropdown-item" onClick={() => openPopup("add")}>
+            <div className="schedule-dropdown-menu">
+              <button onClick={() => openPopup("add")}>
                 Thêm mới lịch trình
-              </div>
-              <div className="dropdown-item">Thêm tuần lịch trình mặc định</div>
+              </button>
+              <button>Thêm tuần lịch trình mặc định</button>
             </div>
           )}
         </div>
       </div>
 
       {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <h3>
+        <div className="schedule-popup-overlay">
+          <div className="schedule-popup-content">
+            <h2>
               {popupMode === "add" ? "Thêm lịch trình" : "Chỉnh sửa lịch trình"}
-            </h3>
+            </h2>
             {popupMode === "add" ? (
-              <form className="popup-form">
-                <label>
-                  Ngày:
+              <div>
+                <div className="schedule-form-group">
+                  <label>Ngày:</label>
                   <input
                     type="date"
                     value={formData.date}
@@ -320,9 +320,9 @@ const ScheduleManager = () => {
                     }
                     required
                   />
-                </label>
-                <label>
-                  Tài xế:
+                </div>
+                <div className="schedule-form-group">
+                  <label>Tài xế:</label>
                   <select
                     value={formData.driverId}
                     onChange={(e) =>
@@ -337,9 +337,9 @@ const ScheduleManager = () => {
                       </option>
                     ))}
                   </select>
-                </label>
-                <label>
-                  Xe buýt:
+                </div>
+                <div className="schedule-form-group">
+                  <label>Xe buýt:</label>
                   <select
                     value={formData.busId}
                     onChange={(e) =>
@@ -354,9 +354,9 @@ const ScheduleManager = () => {
                       </option>
                     ))}
                   </select>
-                </label>
-                <label>
-                  Tuyến đường:
+                </div>
+                <div className="schedule-form-group">
+                  <label>Tuyến đường:</label>
                   <select
                     value={formData.routeId}
                     onChange={(e) =>
@@ -371,9 +371,9 @@ const ScheduleManager = () => {
                       </option>
                     ))}
                   </select>
-                </label>
-                <label>
-                  Giờ xuất phát:
+                </div>
+                <div className="schedule-form-group">
+                  <label>Giờ xuất phát:</label>
                   <input
                     type="time"
                     value={formData.departureTime}
@@ -385,44 +385,44 @@ const ScheduleManager = () => {
                     }
                     required
                   />
-                </label>
-              </form>
-            ) : (
-              <div className="popup-edit-layout">
-                <div className="popup-column">
-                  <h4>Thông tin hiện tại</h4>
-                  <form className="popup-form">
-                    <label>
-                      <strong>Ngày:</strong>{" "}
-                      {editingTrip ? editingTrip.trip_date.split("T")[0] : ""}
-                    </label>
-                    <label>
-                      <strong>Tài xế:</strong>{" "}
-                      {drivers.find(
-                        (d) => d.driver_id === editingTrip?.driver_id
-                      )?.driver_name || ""}
-                    </label>
-                    <label>
-                      <strong>Xe buýt:</strong>{" "}
-                      {buses.find((b) => b.bus_id === editingTrip?.bus_id)
-                        ?.bus_name || `Bus ${editingTrip?.bus_id}`}
-                    </label>
-                    <label>
-                      <strong>Tuyến đường:</strong>{" "}
-                      {routes.find((r) => r.route_id === editingTrip?.route_id)
-                        ?.route_name || ""}
-                    </label>
-                    <label>
-                      <strong>Giờ xuất phát:</strong>{" "}
-                      {editingTrip ? editingTrip.departure_time : ""}
-                    </label>
-                  </form>
                 </div>
-                <div className="popup-column">
-                  <h4>Thông tin mới</h4>
-                  <form className="popup-form">
-                    <label>
-                      Ngày:
+              </div>
+            ) : (
+              <div className="schedule-form-cols">
+                <div className="schedule-form-col">
+                  <h3>Thông tin hiện tại</h3>
+                  <div>
+                    <div className="schedule-info-item">
+                      <div className="schedule-info-label">Ngày:</div>
+                      <div className="schedule-info-value">{editingTrip ? editingTrip.trip_date.split("T")[0] : ""}</div>
+                    </div>
+                    <div className="schedule-info-item">
+                      <div className="schedule-info-label">Tài xế:</div>
+                      <div className="schedule-info-value">{drivers.find(
+                        (d) => d.driver_id === editingTrip?.driver_id
+                      )?.driver_name || ""}</div>
+                    </div>
+                    <div className="schedule-info-item">
+                      <div className="schedule-info-label">Xe buýt:</div>
+                      <div className="schedule-info-value">{buses.find((b) => b.bus_id === editingTrip?.bus_id)
+                        ?.bus_name || `Bus ${editingTrip?.bus_id}`}</div>
+                    </div>
+                    <div className="schedule-info-item">
+                      <div className="schedule-info-label">Tuyến đường:</div>
+                      <div className="schedule-info-value">{routes.find((r) => r.route_id === editingTrip?.route_id)
+                        ?.route_name || ""}</div>
+                    </div>
+                    <div className="schedule-info-item">
+                      <div className="schedule-info-label">Giờ xuất phát:</div>
+                      <div className="schedule-info-value">{editingTrip ? editingTrip.departure_time : ""}</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="schedule-form-col">
+                  <h3>Thông tin mới</h3>
+                  <div>
+                    <div className="schedule-form-group">
+                      <label>Ngày:</label>
                       <input
                         type="date"
                         value={formData.date}
@@ -431,9 +431,9 @@ const ScheduleManager = () => {
                         }
                         required
                       />
-                    </label>
-                    <label>
-                      Tài xế:
+                    </div>
+                    <div className="schedule-form-group">
+                      <label>Tài xế:</label>
                       <select
                         value={formData.driverId}
                         onChange={(e) =>
@@ -451,9 +451,9 @@ const ScheduleManager = () => {
                           </option>
                         ))}
                       </select>
-                    </label>
-                    <label>
-                      Xe buýt:
+                    </div>
+                    <div className="schedule-form-group">
+                      <label>Xe buýt:</label>
                       <select
                         value={formData.busId}
                         onChange={(e) =>
@@ -468,9 +468,9 @@ const ScheduleManager = () => {
                           </option>
                         ))}
                       </select>
-                    </label>
-                    <label>
-                      Tuyến đường:
+                    </div>
+                    <div className="schedule-form-group">
+                      <label>Tuyến đường:</label>
                       <select
                         value={formData.routeId}
                         onChange={(e) =>
@@ -485,9 +485,9 @@ const ScheduleManager = () => {
                           </option>
                         ))}
                       </select>
-                    </label>
-                    <label>
-                      Giờ xuất phát:
+                    </div>
+                    <div className="schedule-form-group">
+                      <label>Giờ xuất phát:</label>
                       <input
                         type="time"
                         value={formData.departureTime}
@@ -499,16 +499,16 @@ const ScheduleManager = () => {
                         }
                         required
                       />
-                    </label>
-                  </form>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
-            <div className="popup-actions">
-              <button className="schedule-btn" onClick={handleSubmit}>
+            <div className="schedule-popup-actions">
+              <button onClick={handleSubmit}>
                 Lưu
               </button>
-              <button className="schedule-btn cancel-btn" onClick={closePopup}>
+              <button onClick={closePopup}>
                 Hủy
               </button>
             </div>
@@ -517,16 +517,17 @@ const ScheduleManager = () => {
       )}
 
       <div className="schedule-table">
-        <div className="schedule-table-header">
-          {days.map((day) => (
-            <div key={day}>{day}</div>
-          ))}
-        </div>
+        <div className="schedule-grid">
+          <div className="schedule-grid-header">
+            <div>Tuyến đường</div>
+            {days.map((day) => (
+              <div key={day}>{day}</div>
+            ))}
+          </div>
 
-        <div className="schedule-table-body">
           {routes.map((route) => (
-            <div className="schedule-row" key={route.route_id}>
-              <div className="schedule-table-route-name">
+            <div className="schedule-grid-row" key={route.route_id}>
+              <div className="route-label">
                 {route.route_name}
               </div>
               {days.map((day) => {

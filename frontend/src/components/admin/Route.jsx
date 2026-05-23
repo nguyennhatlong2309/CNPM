@@ -308,27 +308,27 @@ function RouteManagement() {
         </button>
       </div>
 
-      <div className="route-content-middle">
-        <div className="route-detail-section">
-          <div className="route-map-container">
-            <MAPP
-              list_points={selectedRoutePoints}
-              selectedPoint={selectedPoint}
-              selectedRouteID={selectedRouteId}
-            />
-          </div>
-
-          <div className="route-info">
-            {selectedRoutePoints?.map((element) => (
-              <div
-                key={element.point_id}
-                onClick={() => setSelectedPoint(element)}
-              >
-                {element.point_name}
-              </div>
-            ))}
-          </div>
+      <div className="route-main">
+        <div className="route-map-area">
+          <MAPP
+            list_points={selectedRoutePoints}
+            selectedPoint={selectedPoint}
+            selectedRouteID={selectedRouteId}
+          />
         </div>
+
+        <div className="route-list-panel">
+          {selectedRoutePoints?.map((element) => (
+            <div
+              key={element.point_id}
+              className={`route-item ${selectedPoint?.point_id === element.point_id ? 'selected' : ''}`}
+              onClick={() => setSelectedPoint(element)}
+            >
+              <div className="route-item-name">{element.point_name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
         <div className="route-table">
           <div className="route-table-header">
@@ -344,8 +344,8 @@ function RouteManagement() {
                 key={route.route_id}
                 className={
                   selectedRouteId === route.route_id
-                    ? "selected route-table-body-row"
-                    : "route-table-body-row"
+                    ? "selected route-row"
+                    : "route-row"
                 }
                 onClick={() => {
                   setSelectedRouteId(route.route_id);
@@ -357,10 +357,10 @@ function RouteManagement() {
                 <div>{index + 1}</div>
                 <div>{route.route_name}</div>
                 <div>{route.status}</div>
-                <div>
+                <div className="route-actions">
                   <button
                     aria-label={`Chỉnh sửa tuyến ${route.route_name}`}
-                    className="btn-icon"
+                    className="route-btn-icon"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEdit(route);
@@ -370,7 +370,7 @@ function RouteManagement() {
                   </button>
                   <button
                     aria-label={`Xóa tuyến ${route.route_name}`}
-                    className="btn-icon"
+                    className="route-btn-icon"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(route.route_id);
@@ -383,20 +383,19 @@ function RouteManagement() {
             ))}
           </div>
         </div>
-      </div>
 
       {/* Modal thêm/chỉnh sửa tuyến (bằng CSS thuần) */}
       {isModalOpen && (
-        <div className="route-modal-overlay" onClick={closeModal}>
+        <div className="route-popup-overlay" onClick={closeModal}>
           <div
-            className="route-modal-content"
+            className="route-popup-content"
             onClick={(e) => e.stopPropagation()}
           >
             <div>
               <h2>{isEditing ? "Chỉnh sửa tuyến" : "Thêm tuyến mới"}</h2>
             </div>
-            <div className="route-modal-body">
-              <div className="route-name-status">
+            <div className="route-popup-body">
+              <div className="route-popup-form">
                 <label>
                   Tên tuyến:
                   <input
@@ -407,7 +406,7 @@ function RouteManagement() {
                     placeholder="Nhập tên tuyến"
                   />
                   {errors.route_name && (
-                    <span className="route-error">{errors.route_name}</span>
+                    <span className="error-text">{errors.route_name}</span>
                   )}
                 </label>
                 <label>
@@ -423,9 +422,9 @@ function RouteManagement() {
                 </label>
               </div>
               {errors.points && (
-                <span className="route-error">{errors.points}</span>
+                <span className="error-text">{errors.points}</span>
               )}
-              <div className="map-in-modal">
+              <div className="route-popup-map">
                 <AddEditMap
                   onSavePoints={handleSavePointsFromMap}
                   initialPoints={selectedRoutePoints}

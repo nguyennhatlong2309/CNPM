@@ -257,8 +257,8 @@ export default function StudentManagement() {
               key={student.student_id}
               className={
                 selectedId === student.student_id
-                  ? "selected student-table-row"
-                  : "student-table-row"
+                  ? "selected student-row"
+                  : "student-row"
               }
               onClick={() => handleSelectStudent(student.student_id)}
               tabIndex={0}
@@ -269,7 +269,7 @@ export default function StudentManagement() {
               <div>{student.parent_name}</div>
               <div>{student.phone}</div>
               <div>{student.status}</div>
-              <div className="actions">
+              <div className="student-actions">
                 <button
                   aria-label={`Chỉnh sửa ${student.student_name}`}
                   className="student-btn-icon"
@@ -298,78 +298,81 @@ export default function StudentManagement() {
 
       {selectedStudent && (
         <div className="student-detail">
-          <div className="student-info-gr">
-            <div className="label">Họ tên</div>
-            <div className="value">
-              <b>{selectedStudent.student_name}</b>
+          <div className="student-detail-title">Chi tiết học sinh</div>
+          <div className="student-detail-grid">
+            <div className="student-detail-item">
+              <div className="student-detail-label">Họ tên</div>
+              <div className="student-detail-value">
+                <b>{selectedStudent.student_name}</b>
+              </div>
             </div>
-          </div>
-          <div className="student-info-gr">
-            <div className="label">Phụ huynh</div>
-            <div className="value">
-              <b>
-                {parents.find((p) => p.parent_id == selectedStudent.parent_id)
-                  ?.parent_name || ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Phụ huynh</div>
+              <div className="student-detail-value">
+                <b>
+                  {parents.find((p) => p.parent_id == selectedStudent.parent_id)
+                    ?.parent_name || ""}
+                </b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Số điện thoại</div>
-            <div className="value">
-              <b>
-                {parents.find((p) => p.parent_id == selectedStudent.parent_id)
-                  ?.phone || ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Số điện thoại</div>
+              <div className="student-detail-value">
+                <b>
+                  {parents.find((p) => p.parent_id == selectedStudent.parent_id)
+                    ?.phone || ""}
+                </b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Trạng thái</div>
-            <div className="value">
-              <b>{selectedStudent.status}</b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Trạng thái</div>
+              <div className="student-detail-value">
+                <b>{selectedStudent.status}</b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Tuyến đường</div>
-            <div className="value">
-              <b>
-                {routes.find((r) => r.route_id == selectedStudent.route_id)
-                  ?.route_name || ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Tuyến đường</div>
+              <div className="student-detail-value">
+                <b>
+                  {routes.find((r) => r.route_id == selectedStudent.route_id)
+                    ?.route_name || ""}
+                </b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Điểm đón</div>
-            <div className="value">
-              <b>
-                {points.find(
-                  (p) => p.point_id == selectedStudent.pickup_point_id
-                )?.point_name || ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Điểm đón</div>
+              <div className="student-detail-value">
+                <b>
+                  {points.find(
+                    (p) => p.point_id == selectedStudent.pickup_point_id
+                  )?.point_name || ""}
+                </b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Điểm trả</div>
-            <div className="value">
-              <b>
-                {points.find(
-                  (p) => p.point_id == selectedStudent.dropoff_point_id
-                )?.point_name || ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Điểm trả</div>
+              <div className="student-detail-value">
+                <b>
+                  {points.find(
+                    (p) => p.point_id == selectedStudent.dropoff_point_id
+                  )?.point_name || ""}
+                </b>
+              </div>
             </div>
-          </div>
 
-          <div className="student-info-gr">
-            <div className="label">Giờ đón/trả</div>
-            <div className="value">
-              <b>
-                {`${selectedStudent.pickuptime} / ${selectedStudent.dropofftime}` ||
-                  ""}
-              </b>
+            <div className="student-detail-item">
+              <div className="student-detail-label">Giờ đón/trả</div>
+              <div className="student-detail-value">
+                <b>
+                  {`${selectedStudent.pickuptime} / ${selectedStudent.dropofftime}` ||
+                    ""}
+                </b>
+              </div>
             </div>
           </div>
         </div>

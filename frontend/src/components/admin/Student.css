@@ -1,260 +1,267 @@
-/* Reset & cơ bản */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
+/* ============================================================
+   SSB - Student Management (Học Sinh)
+   Premium Dark Table + Detail Panel + Modal
+   ============================================================ */
 
-body,
-html,
-#root {
-  height: 100%;
-  background-color: #f5faff;
-  color: #222;
-}
-
-/* Phần nội dung chính */
 .student-content {
-  flex: 1;
-  padding: 0 40px;
+  padding: var(--container-padding);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  gap: 16px;
 }
 
+/* ===== HEADER ===== */
 .student-content-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-/* Ô tìm kiếm */
 .student-search-input {
-  margin-left: 20px;
   width: 300px;
-  padding: 8px 14px;
-  border: 1px solid #ddd;
-  border-radius: 14px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s ease;
 }
 
-.student-search-input:focus {
-  border-color: #4a90e2;
-}
-
-/* Nút Thêm học sinh */
 .student-btn-add {
-  background-color: #4a90e2;
-  color: white;
+  height: var(--button-height);
+  padding: 0 16px;
+  border-radius: var(--radius);
   border: none;
-  padding: 10px 24px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 1rem;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
 }
-
 .student-btn-add:hover {
-  background-color: #3577d1;
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
 }
 
-/* Bảng dữ liệu học sinh */
+/* ===== TABLE ===== */
 .student-table {
-  flex: 1;
-  width: 100%;
-  overflow-x: auto;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
-/* Fixed header */
 .student-table-header {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr;
-  min-width: 600px;
-  font-size: 1rem;
-  user-select: none;
-  padding: 14px 18px;
-  background-color: white;
-  font-weight: 700;
-  border-bottom: 2px solid #4f93f7;
-}
-
-/* Scrollable body */
-.student-table-body {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 0px;
-}
-
-/* Rows */
-.student-table-row {
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr;
-  background-color: white;
-  cursor: pointer;
-  padding: 0px 18px;
-  border-bottom: 1px solid #f1f1f1;
-  transition: background-color 0.25s ease;
-  margin: 5px 0;
-  text-align: center;
-}
-.student-table-header div,
-.student-table-row div {
-  display: flex;
-  justify-content: center;
-  text-align: center;
+  grid-template-columns: 55px 1fr 1fr 1fr 1fr 120px;
+  padding: 0 20px;
+  height: 42px;
+  background: var(--bg-table-header);
+  border-bottom: 1px solid var(--border);
   align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
 }
 
-.student-table-row:hover {
-  background-color: #e8f1ff;
+.student-table-body {
+  max-height: 300px;
+  overflow-y: auto;
 }
 
-.selected {
-  background-color: #cde5ff;
-}
-
-/* Icon thao tác */
-.student-btn-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  margin-left: 14px;
-  color: #222;
-}
-
-.student-btn-icon:hover {
-  color: #4a90e2;
-}
-
-/* Chi tiết học sinh */
-.student-detail {
-  margin-top: 5px;
-  background-color: white;
-  border-radius: 14px;
-  padding: 10px 40px;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+.student-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px 45px;
-  font-size: 1rem;
-  color: #444;
-  height: 28%;
-  border: solid 1px black;
-  margin: 10px;
+  grid-template-columns: 55px 1fr 1fr 1fr 1fr 120px;
+  padding: 0 20px;
+  height: var(--row-height);
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
 }
 
-/* Nhãn */
-.student-info-gr .label {
+.student-row:last-child { border-bottom: none; }
+.student-row:hover { background: var(--bg-row-hover); }
+.student-row.selected {
+  background: var(--bg-row-selected) !important;
+  border-left-color: var(--accent-primary) !important;
+}
+
+.student-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.student-btn-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all var(--transition-fast);
+}
+.student-row:hover .student-btn-icon,
+.student-row.selected .student-btn-icon { opacity: 1; }
+.student-btn-icon:hover { background: var(--bg-input-hover); }
+
+/* ===== DETAIL PANEL ===== */
+.student-detail {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: slideInUp 200ms ease;
+}
+
+.student-detail-title {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.student-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.student-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.student-detail-label {
+  font-family: var(--font-label);
+  font-size: 0.72rem;
   font-weight: 500;
-  color: #555;
-  margin-bottom: 6px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-/* Giá trị */
-.student-info-gr .value {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #222;
+.student-detail-value {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-/* Popup với tiền tố student- */
+/* ===== MODAL ===== */
 .student-popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 200ms ease;
 }
 
 .student-popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 650px;
-  max-height: 85vh;
+  background: var(--bg-modal);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
   overflow-y: auto;
+  animation: slideInDown 250ms ease;
+  padding: 24px;
 }
 
-.student-form-row {
-  display: flex;
-  gap: 20px;
-}
-
-.student-form-col {
-  flex: 1;
+.student-popup-content h2 {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
 }
 
 .student-form-group {
-  display: block;
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
 }
 
 .student-form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
-.student-form-group input,
-.student-form-group select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+.student-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
 .student-popup-actions {
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
+  justify-content: flex-end;
   margin-top: 20px;
-}
-
-.student-popup-actions button {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
 }
 
 .student-popup-actions button:first-child {
-  background-color: #4a90e2;
-  color: white;
+  height: var(--button-height);
+  padding: 0 20px;
+  border-radius: var(--radius);
+  border: none;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
 }
-
-.student-popup-actions button:first-child:hover {
-  background-color: #3577d1;
-}
+.student-popup-actions button:first-child:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
 .student-popup-actions button:last-child {
-  background-color: #f5f5f5;
-  color: #222;
+  height: var(--button-height);
+  padding: 0 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-medium);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
 }
-
-.student-popup-actions button:last-child:hover {
-  background-color: #e0e0e0;
-}
-
-.error-text {
-  color: red;
-  font-size: 0.8rem;
-  margin-top: 2px;
-}
-
-.error {
-  border: solid 1px red;
-}
+.student-popup-actions button:last-child:hover { background: var(--bg-input-hover); color: var(--text-primary); }

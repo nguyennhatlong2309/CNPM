@@ -1,262 +1,370 @@
-/* Reset cơ bản */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-body,
-html,
-#root {
-  height: 100%;
-  background-color: #ebf2ff;
-  color: #222;
-}
+/* ============================================================
+   SSB - Route Management (Tuyến Đường)
+   Premium Dark Split Layout + Mapbox
+   ============================================================ */
 
 .route-content {
-  flex: 1;
-  padding: 0 40px;
+  padding: var(--container-padding);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  gap: 16px;
 }
 
-.route-content-header {
+/* ===== HEADER ===== */
+.route-header-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  padding: 0;
-}
-
-.route-header h1 {
-  font-weight: 800;
-  font-size: 1.9rem;
-  color: #222;
-  margin-top: 0;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .route-btn-add {
-  background-color: #4a86ff;
-  color: white;
-  padding: 12px 28px;
-  border: none;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.route-header .btn-add:hover {
-  background-color: #3571d3;
-}
-
-.route-search-input {
-  width: 300px;
-  height: 36px;
+  height: var(--button-height);
   padding: 0 16px;
-  font-size: 1rem;
-  border-radius: 14px;
-  border: 1px solid #ccd6dd;
-  outline: none;
+  border-radius: var(--radius);
+  border: none;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  white-space: nowrap;
+}
+.route-btn-add:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
 }
 
-.route-search-input:focus {
-  border-color: #4f93f7;
+/* ===== MAIN SPLIT LAYOUT ===== */
+.route-main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--grid-gap);
+  min-height: 440px;
 }
 
-.route-content-middle {
-  display: flex;
-  flex-direction: row;
-  height: 90%;
+/* ===== MAP AREA ===== */
+.route-map-area {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  min-height: 440px;
+  position: relative;
 }
 
-/* Bảng tuyến đường */
-.route-table {
-  width: 40%;
-  overflow-x: auto;
-  overflow-y: auto;
-  margin-bottom: 20px;
+/* Override Mapbox style for dark mode */
+.route-map-area .mapboxgl-map {
+  border-radius: var(--radius-lg);
+}
+
+.route-map-area .mapboxgl-ctrl-attrib {
+  opacity: 0.5;
+}
+
+/* ===== ROUTE LIST PANEL ===== */
+.route-list-panel {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
+.route-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+}
+
+.route-item:hover {
+  background: var(--bg-row-hover);
+  border-left-color: var(--accent-primary-glow);
+}
+
+.route-item.selected {
+  background: var(--bg-row-selected);
+  border-left-color: var(--accent-primary);
+}
+
+.route-item-name {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.route-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.route-item-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+.route-item:hover .route-item-actions,
+.route-item.selected .route-item-actions {
+  opacity: 1;
+}
+
+.route-btn-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
+}
+.route-btn-icon:hover {
+  background: var(--bg-input-hover);
+  color: var(--text-primary);
+}
+
+/* ===== ROUTES TABLE ===== */
+.route-table {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
 .route-table-header {
-  height: 50px;
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 1fr 1fr;
-  font-size: 1rem;
-  user-select: none;
-  background-color: white;
-  font-weight: 700;
-  border-bottom: 2px solid #4f93f7;
-}
-.route-table-header div {
-  display: flex;
-  text-align: center;
-  justify-content: center;
+  grid-template-columns: 55px 1fr 1fr 140px;
+  padding: 0 20px;
+  height: 42px;
+  background: var(--bg-table-header);
+  border-bottom: 1px solid var(--border);
   align-items: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
 }
 
 .route-table-body {
-  flex: 1;
+  max-height: 300px;
   overflow-y: auto;
-  margin-bottom: 0px;
 }
-.route-table-body-row {
+
+.route-row {
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 1fr 1fr;
-  font-size: 1rem;
-  user-select: none;
-  margin: 5px 0px;
-  background-color: white;
-  border-bottom: 1px solid #f1f1f1;
-  cursor: pointer;
-}
-
-.route-table-body-row div {
-  display: flex;
-  text-align: center;
-  justify-content: center;
+  grid-template-columns: 55px 1fr 1fr 140px;
+  padding: 0 20px;
+  height: var(--row-height);
   align-items: center;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
 }
 
-/* Cột thao tác */
-.route-table-body-row .btn-icon {
+.route-row:last-child { border-bottom: none; }
+.route-row:hover { background: var(--bg-row-hover); }
+.route-row.selected {
+  background: var(--bg-row-selected);
+  border-left-color: var(--accent-primary);
+}
+
+.route-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.route-actions button {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius);
   border: none;
-  background: none;
+  background: transparent;
   cursor: pointer;
-  font-size: 1.25rem;
-  margin-left: 14px;
-  color: #333;
-  transition: color 0.3s ease;
-}
-
-.route-table-body-row .btn-icon:hover {
-  color: #4a86ff;
-}
-
-/* Phần bản đồ + chi tiết tuyến */
-.route-detail-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  margin-right: 10px;
-  box-shadow: 0 7px 25px rgb(30 41 59 / 0.06);
-}
-
-/* Khung bản đồ */
-.route-map-container {
-  height: 100%;
-  max-height: 100%;
-  background: white;
-  border-radius: 10px 10px 0px 0px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
+  font-size: 0.8rem;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  opacity: 0.5;
+  transition: all var(--transition-fast);
+  color: var(--text-secondary);
 }
+.route-row:hover .route-actions button,
+.route-row.selected .route-actions button { opacity: 1; }
+.route-actions button:hover { background: var(--bg-input-hover); }
 
-.route-info {
-  height: 290px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: flex-start;
-  align-content: flex-start;
-  background-color: white;
-  border-radius: 0 0 10px 10px;
-  overflow-y: auto;
-}
-.route-info div {
-  flex: 0 0 auto;
-  padding: 5px 10px;
-  background-color: #eee;
-  border-radius: 5px;
-  text-align: center;
-  margin: 10px 0px 10px 10px;
-}
-
-.route-info h3 {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin: 0;
-}
-
-.route-info p {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #222;
-}
-
-/* Modal styles (CSS thuần) */
-.route-modal-overlay {
+/* ===== MODAL ===== */
+.route-popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: var(--z-modal);
   display: flex;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.route-modal-content {
-  display: flex;
-  flex-direction: column;
-  background: white;
   padding: 20px;
-  border-radius: 8px;
-  width: 90vw;
-  height: 95vh;
-  max-height: 95vh;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 200ms ease;
 }
 
-.route-modal-body {
+.route-popup-content {
+  background: var(--bg-modal);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-modal);
+  width: 100%;
+  max-width: 900px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideInDown 250ms ease;
+  padding: 24px;
+}
+
+.route-popup-content h2 {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin-bottom: 20px;
-  flex: 1;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.route-popup-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.route-popup-form {
   display: flex;
   flex-direction: column;
+  gap: 14px;
 }
 
-.route-modal-body label {
+.route-popup-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.route-popup-map {
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.route-popup-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.route-popup-actions button:first-child {
+  height: var(--button-height);
+  padding: 0 20px;
+  border-radius: var(--radius);
+  border: none;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-primary-hover));
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.route-popup-actions button:first-child:hover { filter: brightness(1.1); }
+
+.route-popup-actions button:not(:first-child) {
+  height: var(--button-height);
+  padding: 0 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-medium);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.route-popup-actions button:not(:first-child):hover { background: var(--bg-input-hover); color: var(--text-primary); }
+
+/* ===== POINT LIST ===== */
+.point-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.point-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--text-primary);
 }
 
-.route-modal-body select,
-.route-modal-body input {
-  width: 300px;
-  padding: 8px;
-  margin-left: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-
-.map-in-modal {
-  flex: 1;
-  margin-top: 10px;
-  overflow: auto;
-}
-
-.route-name-status {
+.point-item button {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.75rem;
   display: flex;
-  align-items: center; /* giúp input & select nằm cùng 1 hàng */
-  gap: 10px; /* khoảng cách giữa các label */
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-danger);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
-
-.route-error {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-  display: block;
-}
+.point-item button:hover { background: var(--accent-danger-muted); }
