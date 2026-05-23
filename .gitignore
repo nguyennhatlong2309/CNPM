@@ -136,4 +136,9 @@ dist
 
 # rtk
 .rtk
+
+# AI assistant files
+CLAUDE.md
+implementation_plan.md
+task.md
 CLAUDE.md
